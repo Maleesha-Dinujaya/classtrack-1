@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useAuth } from '@/context/AuthContext'
 import {
   Table,
   TableBody,
@@ -27,9 +28,11 @@ import {
 } from 'lucide-react'
 
 export default function StudentDashboard() {
+  const { user } = useAuth()
+
   // Mock data - in real app this would come from API
   const studentData = {
-    name: 'John Doe',
+    name: user?.name ?? '',
     studentId: 'STD001',
     currentGPA: 3.75,
     overallAttendance: 92,

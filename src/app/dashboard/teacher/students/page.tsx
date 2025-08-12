@@ -58,7 +58,7 @@ export default function TeacherStudents() {
   const students = [
     {
       id: 'STD001',
-      name: 'John Doe',
+      name: 'Alex Johnson',
       email: 'john@student.edu',
       phone: '+1 (555) 123-4567',
       address: '123 Campus St, University City',

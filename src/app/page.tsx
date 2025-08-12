@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -12,15 +13,39 @@ import { GraduationCap, BookOpen, Mail, Lock, User, School } from 'lucide-react'
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+  const { login } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
+
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get('email') as string
+
+    // Mock authentication/registration
     setTimeout(() => {
+      let user
+      if (authMode === 'login') {
+        const mockUsers: Record<string, { name: string; role: 'student' | 'teacher' }> = {
+          'student@example.com': { name: 'Alice Johnson', role: 'student' },
+          'teacher@example.com': { name: 'Mr. Smith', role: 'teacher' }
+        }
+        const found = mockUsers[email]
+        user = {
+          name: found ? found.name : email.split('@')[0],
+          email,
+          role: found ? found.role : email.includes('teacher') ? 'teacher' : 'student'
+        }
+      } else {
+        const role = formData.get('role') as 'student' | 'teacher'
+        const first = formData.get('firstName') as string
+        const last = formData.get('lastName') as string
+        user = { name: `${first} ${last}`, email, role }
+      }
+
+      login(user)
       setIsLoading(false)
-      // For demo purposes, redirect to dashboard
-      window.location.href = '/dashboard/student'
+      window.location.href = `/dashboard/${user.role}`
     }, 1500)
   }
 
@@ -72,7 +97,7 @@ export default function LoginPage() {
                 <>
                   <div className="space-y-2">
                     <Label htmlFor="role">I am a</Label>
-                    <Select required>
+                    <Select name="role" required>
                       <SelectTrigger id="role">
                         <SelectValue placeholder="Select your role" />
                       </SelectTrigger>
@@ -98,6 +123,7 @@ export default function LoginPage() {
                       <Label htmlFor="firstName">First Name</Label>
                       <Input
                         id="firstName"
+                        name="firstName"
                         placeholder="John"
                         required
                         disabled={isLoading}
@@ -107,6 +133,7 @@ export default function LoginPage() {
                       <Label htmlFor="lastName">Last Name</Label>
                       <Input
                         id="lastName"
+                        name="lastName"
                         placeholder="Doe"
                         required
                         disabled={isLoading}
@@ -122,6 +149,7 @@ export default function LoginPage() {
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="john@example.com"
                     className="pl-9"
@@ -137,6 +165,7 @@ export default function LoginPage() {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="••••••••"
                     className="pl-9"
@@ -153,6 +182,7 @@ export default function LoginPage() {
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="confirmPassword"
+                      name="confirmPassword"
                       type="password"
                       placeholder="••••••••"
                       className="pl-9"
