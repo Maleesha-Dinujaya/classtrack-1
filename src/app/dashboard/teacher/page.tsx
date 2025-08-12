@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/context/AuthContext'
 import {
   Table,
   TableBody,
@@ -40,10 +41,11 @@ export default function TeacherDashboard() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedClass, setSelectedClass] = useState('all')
   const [isMarkingAttendance, setIsMarkingAttendance] = useState(false)
+  const { user } = useAuth()
 
   // Mock data - in real app this would come from API
   const teacherData = {
-    name: 'Dr. Sarah Johnson',
+    name: user?.name ?? 'Teacher',
     employeeId: 'EMP001',
     department: 'Computer Science',
     totalStudents: 145,
@@ -62,7 +64,7 @@ export default function TeacherDashboard() {
   const students = [
     {
       id: 'STD001',
-      name: 'John Doe',
+      name: 'Alex Johnson',
       email: 'john@student.edu',
       class: 'cs101',
       attendance: 92,
@@ -127,7 +129,7 @@ export default function TeacherDashboard() {
     },
     {
       type: 'message',
-      message: 'New message from John Doe regarding project',
+      message: 'New message from Alex Johnson regarding project',
       time: '6 hours ago',
       urgent: false
     }

@@ -20,7 +20,8 @@ import {
   X
 } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -29,15 +30,10 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+  const { user, logout } = useAuth()
 
-  // Mock user data - in real app this would come from auth context
-  const user = {
-    name: 'John Doe',
-    email: 'john@student.edu',
-    role: 'student', // or 'teacher'
-    avatar: '',
-    notifications: 3
-  }
+  if (!user) return null
 
   const studentNavItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard/student' },
@@ -88,7 +84,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {/* Notifications */}
               <Button variant="ghost" size="sm" className="relative">
                 <Bell className="h-5 w-5" />
-                {user.notifications > 0 && (
+                {user.notifications && user.notifications > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                     {user.notifications}
                   </Badge>
@@ -125,7 +121,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600">
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => {
+                      logout()
+                      router.push('/')
+                    }}
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </DropdownMenuItem>
