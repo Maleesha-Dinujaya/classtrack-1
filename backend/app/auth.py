@@ -8,6 +8,8 @@ from . import schemas, models
 from .database import get_db
 from dotenv import load_dotenv
 import os
+from typing import Optional
+
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "secret")
@@ -29,7 +31,7 @@ def authenticate_user(db: Session, email: str, password: str):
         return None
     return user
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
