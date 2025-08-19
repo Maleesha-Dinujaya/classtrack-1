@@ -1,48 +1,101 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { GraduationCap, BookOpen, Mail, Lock, User, School } from 'lucide-react'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
+} from '@/components/ui/tabs'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import {
+  GraduationCap,
+  BookOpen,
+  Mail,
+  Lock,
+  School,
+  Loader2
+} from 'lucide-react'
+import { authApi } from '@/lib/api'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+  const [error, setError] = useState('')
   const { login } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
+    setError('')
 
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
+    const password = formData.get('password') as string
 
     try {
-      const password = formData.get('password') as string
-      const params = new URLSearchParams()
-      params.append('username', email)
-      params.append('password', password)
-      const res = await api.post('/api/auth/token', params, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      })
-      const token = res.data.access_token as string
-      localStorage.setItem('token', token)
-      const payload = JSON.parse(atob(token.split('.')[1]))
-      const user = {
-        name: email.split('@')[0],
-        email,
-        role: payload.role as 'student' | 'teacher'
-      }
-      login(user)
-      window.location.href = `/dashboard/${user.role}`
-    } catch (error) {
-      console.error(error)
+      const response = await authApi.login(email, password)
+      const { access_token } = response.data
+
+      localStorage.setItem('access_token', access_token)
+
+      const payload = JSON.parse(atob(access_token.split('.')[1]))
+      login({ name: '', email: payload.sub, role: payload.role })
+
+      const dashboard = payload.role === 'teacher' ? '/dashboard/teacher' : '/dashboard/student'
+      window.location.href = dashboard
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Login failed')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+
+    const formData = new FormData(e.currentTarget)
+    const userData = {
+      firstName: formData.get('firstName') as string,
+      lastName: formData.get('lastName') as string,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      confirmPassword: formData.get('confirmPassword') as string,
+      role: formData.get('role') as string
+    }
+
+    if (userData.password !== userData.confirmPassword) {
+      setError('Passwords do not match')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      await authApi.register(userData)
+      setAuthMode('login')
+      setError('')
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Registration failed')
     } finally {
       setIsLoading(false)
     }
@@ -51,7 +104,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo and Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-primary p-3 rounded-xl">
@@ -64,7 +116,14 @@ export default function LoginPage() {
 
         <Card className="shadow-lg border-0">
           <CardHeader className="space-y-1">
-            <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as 'login' | 'register')} className="w-full">
+            <Tabs
+              value={authMode}
+              onValueChange={(value) => {
+                setAuthMode(value as 'login' | 'register')
+                setError('')
+              }}
+              className="w-full"
+            >
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Sign In</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
@@ -91,90 +150,133 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {authMode === 'register' && (
-                <>
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+
+            {authMode === 'login' ? (
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      className="pl-9"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      className="pl-9"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  )}
+                  Sign In
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="role">I am a</Label>
+                  <Select name="role" required>
+                    <SelectTrigger id="role">
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="student">
+                        <div className="flex items-center">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          Student
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="teacher">
+                        <div className="flex items-center">
+                          <School className="h-4 w-4 mr-2" />
+                          Teacher
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="role">I am a</Label>
-                    <Select name="role" required>
-                      <SelectTrigger id="role">
-                        <SelectValue placeholder="Select your role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="student">
-                          <div className="flex items-center">
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Student
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="teacher">
-                          <div className="flex items-center">
-                            <School className="h-4 w-4 mr-2" />
-                            Teacher
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      placeholder="John"
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        placeholder="John"
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        name="lastName"
-                        placeholder="Doe"
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Doe"
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
-                </>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="john@example.com"
-                    className="pl-9"
-                    required
-                    disabled={isLoading}
-                  />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="••••••••"
-                    className="pl-9"
-                    required
-                    disabled={isLoading}
-                  />
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      className="pl-9"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {authMode === 'register' && (
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      className="pl-9"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <div className="relative">
@@ -190,19 +292,15 @@ export default function LoginPage() {
                     />
                   </div>
                 </div>
-              )}
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading && (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                )}
-                {authMode === 'login' ? 'Sign In' : 'Create Account'}
-              </Button>
-            </form>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  )}
+                  Create Account
+                </Button>
+              </form>
+            )}
           </CardContent>
 
           {authMode === 'login' && (
@@ -231,3 +329,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
