@@ -36,7 +36,7 @@ export default function StudentDashboard() {
   useEffect(() => {
     api
       .get('/api/students/me')
-      .then((res) =>
+      .then((res: any) =>
         setStudentData({
           name: res.data.user?.name ?? user?.name ?? '',
           studentId: res.data.student_id,
@@ -47,7 +47,7 @@ export default function StudentDashboard() {
           totalCredits: 0,
         })
       )
-      .catch((err) => console.error(err))
+      .catch((err: any) => console.error(err))
   }, [])
 
   if (!studentData) {
