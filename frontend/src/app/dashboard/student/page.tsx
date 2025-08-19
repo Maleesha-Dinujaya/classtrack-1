@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth } from '@/context/AuthContext'
-import api from '@/lib/api'
+import apiFetch from '@/lib/api'
 import {
   Table,
   TableBody,
@@ -34,12 +34,12 @@ export default function StudentDashboard() {
   const [studentData, setStudentData] = useState<any | null>(null)
 
   useEffect(() => {
-    api
-      .get('/api/students/me')
-      .then((res: any) =>
+    apiFetch('/api/students/me')
+      .then((res) => res.json())
+      .then((data: any) =>
         setStudentData({
-          name: res.data.user?.name ?? user?.name ?? '',
-          studentId: res.data.student_id,
+          name: data.user?.name ?? user?.name ?? '',
+          studentId: data.student_id,
           currentGPA: 0,
           overallAttendance: 0,
           semester: '',
@@ -48,7 +48,7 @@ export default function StudentDashboard() {
         })
       )
       .catch((err: any) => console.error(err))
-  }, [])
+  }, [user?.name])
 
   if (!studentData) {
     return <div>Loading...</div>
