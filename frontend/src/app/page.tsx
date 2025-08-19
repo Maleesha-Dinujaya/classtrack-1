@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -36,6 +37,7 @@ import {
 import { authApi } from '@/lib/api'
 
 export default function LoginPage() {
+  const { login } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
   const [error, setError] = useState('')
@@ -50,15 +52,20 @@ export default function LoginPage() {
     const password = formData.get('password') as string
 
     try {
-      const response = await authApi.login(email, password)
-      const { access_token } = response.data
+      const { access_token } = await authApi.login(email, password)
 
       localStorage.setItem('access_token', access_token)
 
-      // Redirect based on user role (you might need to decode JWT to get role)
-      window.location.href = '/dashboard/student' // Default to student for now
+      const decoded = JSON.parse(atob(access_token.split('.')[1]))
+      login({
+        name: '',
+        email: decoded.sub,
+        role: decoded.role,
+      })
+
+      window.location.href = `/dashboard/${decoded.role}`
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login failed')
+      setError(err?.detail || err.message || 'Login failed')
     } finally {
       setIsLoading(false)
     }
@@ -90,7 +97,7 @@ export default function LoginPage() {
       setAuthMode('login')
       setError('')
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed')
+      setError(err?.detail || err.message || 'Registration failed')
     } finally {
       setIsLoading(false)
     }
