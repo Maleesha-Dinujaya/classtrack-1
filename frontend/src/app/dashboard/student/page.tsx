@@ -1,11 +1,13 @@
-'use client'
+"use client"
 
+import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth } from '@/context/AuthContext'
+import api from '@/lib/api'
 import {
   Table,
   TableBody,
@@ -29,16 +31,27 @@ import {
 
 export default function StudentDashboard() {
   const { user } = useAuth()
+  const [studentData, setStudentData] = useState<any | null>(null)
 
-  // Mock data - in real app this would come from API
-  const studentData = {
-    name: user?.name ?? '',
-    studentId: 'STD001',
-    currentGPA: 3.75,
-    overallAttendance: 92,
-    semester: 'Fall 2024',
-    unreadMessages: 5,
-    totalCredits: 18
+  useEffect(() => {
+    api
+      .get('/api/students/me')
+      .then((res) =>
+        setStudentData({
+          name: res.data.user?.name ?? user?.name ?? '',
+          studentId: res.data.student_id,
+          currentGPA: 0,
+          overallAttendance: 0,
+          semester: '',
+          unreadMessages: 0,
+          totalCredits: 0,
+        })
+      )
+      .catch((err) => console.error(err))
+  }, [])
+
+  if (!studentData) {
+    return <div>Loading...</div>
   }
 
   const subjects = [

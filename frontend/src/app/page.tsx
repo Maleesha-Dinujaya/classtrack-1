@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -22,31 +23,29 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
 
-    // Mock authentication/registration
-    setTimeout(() => {
-      let user
-      if (authMode === 'login') {
-        const mockUsers: Record<string, { name: string; role: 'student' | 'teacher' }> = {
-          'student@example.com': { name: 'Alice Johnson', role: 'student' },
-          'teacher@example.com': { name: 'Mr. Smith', role: 'teacher' }
-        }
-        const found = mockUsers[email]
-        user = {
-          name: found ? found.name : email.split('@')[0],
-          email,
-          role: found ? found.role : email.includes('teacher') ? 'teacher' : 'student'
-        }
-      } else {
-        const role = formData.get('role') as 'student' | 'teacher'
-        const first = formData.get('firstName') as string
-        const last = formData.get('lastName') as string
-        user = { name: `${first} ${last}`, email, role }
+    try {
+      const password = formData.get('password') as string
+      const params = new URLSearchParams()
+      params.append('username', email)
+      params.append('password', password)
+      const res = await api.post('/api/auth/token', params, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      })
+      const token = res.data.access_token as string
+      localStorage.setItem('token', token)
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const user = {
+        name: email.split('@')[0],
+        email,
+        role: payload.role as 'student' | 'teacher'
       }
-
       login(user)
-      setIsLoading(false)
       window.location.href = `/dashboard/${user.role}`
-    }, 1500)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
