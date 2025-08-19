@@ -56,6 +56,7 @@ export default function LoginPage() {
 
       localStorage.setItem('access_token', access_token)
 
+      // Decode JWT to extract role and email
       const decoded = JSON.parse(atob(access_token.split('.')[1]))
       login({
         name: '',
@@ -63,6 +64,7 @@ export default function LoginPage() {
         role: decoded.role,
       })
 
+      // Redirect based on role
       window.location.href = `/dashboard/${decoded.role}`
     } catch (err: any) {
       setError(err?.detail || err.message || 'Login failed')
@@ -331,4 +333,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
