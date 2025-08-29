@@ -28,7 +28,7 @@ export default function TeacherReports() {
 
   const downloadReport = (id: string) => {
     setDownloading(true);
-    // In real app, fetch report from API
+    // In a real app, fetch the report from an API
     setTimeout(() => {
       setDownloading(false);
       alert(`Report ${id} downloaded`);
