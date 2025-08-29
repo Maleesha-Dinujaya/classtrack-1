@@ -26,6 +26,12 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+
+class StudentCreate(UserBase):
+    password: str
+    grade_level: Optional[str] = None
+    department: Optional[str] = None
+
 class StudentBase(BaseModel):
     student_id: str
     grade_level: Optional[str] = None
