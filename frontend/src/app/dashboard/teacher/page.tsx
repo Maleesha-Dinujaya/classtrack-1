@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -57,10 +57,28 @@ import {
   Mail,
 } from "lucide-react";
 
+interface Student {
+  id: string;
+  name: string;
+  email: string;
+  class: string;
+  attendance: number;
+  currentGrade: string;
+  lastActive: string;
+  status: string;
+}
+
 export default function TeacherDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClass, setSelectedClass] = useState("all");
   const [isMarkingAttendance, setIsMarkingAttendance] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [studentClass, setStudentClass] = useState("");
+  const [phone, setPhone] = useState("");
   const { user } = useAuth();
 
   // Mock data - in real app this would come from API
@@ -96,7 +114,7 @@ export default function TeacherDashboard() {
     },
   ];
 
-  const students = [
+  const [students, setStudents] = useState<Student[]>([
     {
       id: "STD001",
       name: "Alex Johnson",
@@ -147,7 +165,7 @@ export default function TeacherDashboard() {
       lastActive: "2 days ago",
       status: "at-risk",
     },
-  ];
+  ]);
 
   const recentActivity = [
     {
@@ -197,6 +215,30 @@ export default function TeacherDashboard() {
     if (percentage >= 90) return "text-green-600";
     if (percentage >= 75) return "text-yellow-600";
     return "text-red-600";
+  };
+
+  const addStudent = () => {
+    if (!firstName || !lastName || !email || !studentId || !studentClass) {
+      return;
+    }
+    const newStudent: Student = {
+      id: studentId,
+      name: `${firstName} ${lastName}`,
+      email,
+      class: studentClass,
+      attendance: 0,
+      currentGrade: "N/A",
+      lastActive: "just now",
+      status: "active",
+    };
+    setStudents((prev) => [...prev, newStudent]);
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setStudentId("");
+    setStudentClass("");
+    setPhone("");
+    setIsAddOpen(false);
   };
 
   return (
@@ -334,64 +376,90 @@ export default function TeacherDashboard() {
                     Manage students, view attendance, and update grades
                   </CardDescription>
                 </div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" className="flex items-center gap-2">
-                      <Plus className="h-4 w-4" />
-                      Add Student
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                      <DialogTitle>Add New Student</DialogTitle>
-                      <DialogDescription>
-                        Enter student information to add them to your class
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>First Name</Label>
-                        <Input placeholder="John" />
+                  <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+                    <DialogTrigger asChild>
+                      <Button size="sm" className="flex items-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add Student
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>Add New Student</DialogTitle>
+                        <DialogDescription>
+                          Enter student information to add them to your class
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>First Name</Label>
+                          <Input
+                            placeholder="John"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Last Name</Label>
+                          <Input
+                            placeholder="Doe"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Email</Label>
+                          <Input
+                            type="email"
+                            placeholder="john@student.edu"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Student ID</Label>
+                          <Input
+                            placeholder="STD001"
+                            value={studentId}
+                            onChange={(e) => setStudentId(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Class</Label>
+                          <Select
+                            value={studentClass}
+                            onValueChange={setStudentClass}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select class" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {classes.map((cls) => (
+                                <SelectItem key={cls.id} value={cls.id}>
+                                  {cls.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Phone</Label>
+                          <Input
+                            placeholder="+1 (555) 123-4567"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                          />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Last Name</Label>
-                        <Input placeholder="Doe" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Email</Label>
-                        <Input type="email" placeholder="john@student.edu" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Student ID</Label>
-                        <Input placeholder="STD001" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Class</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select class" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {classes.map((cls) => (
-                              <SelectItem key={cls.id} value={cls.id}>
-                                {cls.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Phone</Label>
-                        <Input placeholder="+1 (555) 123-4567" />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline">Cancel</Button>
-                      <Button>Add Student</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsAddOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button onClick={addStudent}>Add Student</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
 
               {/* Search and Filter */}
               <div className="flex gap-4 mt-4">
