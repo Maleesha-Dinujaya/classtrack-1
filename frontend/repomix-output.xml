@@ -513,8 +513,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Mock user data - in real app this would come from auth context
   const user = {
-    name: 'John Doe',
-    email: 'john@student.edu',
+    name: 'Kasun Perera',
+    email: 'kasun@student.lk',
     role: 'student', // or 'teacher'
     avatar: '',
     notifications: 3
@@ -703,7 +703,7 @@ export default function StudentAttendance() {
       attended: 23,
       absent: 1,
       trend: 'up',
-      teacher: 'Dr. Smith',
+      teacher: 'Dr. Perera',
       lastClass: '2024-01-12',
       nextClass: '2024-01-15'
     },
@@ -716,7 +716,7 @@ export default function StudentAttendance() {
       attended: 19,
       absent: 3,
       trend: 'down',
-      teacher: 'Prof. Johnson',
+      teacher: 'Prof. Fernando',
       lastClass: '2024-01-11',
       nextClass: '2024-01-15'
     },
@@ -729,7 +729,7 @@ export default function StudentAttendance() {
       attended: 25,
       absent: 1,
       trend: 'up',
-      teacher: 'Dr. Wilson',
+      teacher: 'Dr. Jayasuriya',
       lastClass: '2024-01-12',
       nextClass: '2024-01-16'
     },
@@ -742,7 +742,7 @@ export default function StudentAttendance() {
       attended: 18,
       absent: 2,
       trend: 'stable',
-      teacher: 'Ms. Davis',
+      teacher: 'Ms. Weerasinghe',
       lastClass: '2024-01-10',
       nextClass: '2024-01-16'
     },
@@ -755,7 +755,7 @@ export default function StudentAttendance() {
       attended: 15,
       absent: 3,
       trend: 'down',
-      teacher: 'Prof. Brown',
+      teacher: 'Prof. Jayawardena',
       lastClass: '2024-01-09',
       nextClass: '2024-01-17'
     }
@@ -1108,7 +1108,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A-',
       gpa: 3.7,
-      teacher: 'Dr. Smith'
+      teacher: 'Dr. Perera'
     },
     {
       subject: 'Physics',
@@ -1122,7 +1122,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'B+',
       gpa: 3.3,
-      teacher: 'Prof. Johnson'
+      teacher: 'Prof. Fernando'
     },
     {
       subject: 'Computer Science',
@@ -1136,7 +1136,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A',
       gpa: 4.0,
-      teacher: 'Dr. Wilson'
+      teacher: 'Dr. Jayasuriya'
     },
     {
       subject: 'English Literature',
@@ -1149,7 +1149,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A-',
       gpa: 3.7,
-      teacher: 'Ms. Davis'
+      teacher: 'Ms. Weerasinghe'
     },
     {
       subject: 'History',
@@ -1162,15 +1162,15 @@ export default function StudentGrades() {
       ],
       currentGrade: 'B',
       gpa: 3.0,
-      teacher: 'Prof. Brown'
+      teacher: 'Prof. Jayawardena'
     }
   ]
 
   const semesterHistory = [
-    { semester: 'Fall 2024', gpa: 3.75, credits: 18, status: 'Current' },
-    { semester: 'Spring 2024', gpa: 3.62, credits: 16, status: 'Completed' },
-    { semester: 'Fall 2023', gpa: 3.45, credits: 17, status: 'Completed' },
-    { semester: 'Spring 2023', gpa: 3.80, credits: 17, status: 'Completed' },
+    { semester: 'Semester 1', gpa: 3.75, credits: 18, status: 'Current' },
+    { semester: 'Semester 2', gpa: 3.62, credits: 16, status: 'Completed' },
+    { semester: 'Semester 3', gpa: 3.45, credits: 17, status: 'Completed' },
+    { semester: 'Semester 4', gpa: 3.80, credits: 17, status: 'Completed' },
   ]
 
   const getGradeColor = (grade: string) => {
@@ -1314,7 +1314,7 @@ export default function StudentGrades() {
           {/* Current Semester Grades */}
           <Card>
             <CardHeader>
-              <CardTitle>Current Semester - Fall 2024</CardTitle>
+              <CardTitle>Current Semester - Semester 1</CardTitle>
               <CardDescription>Detailed breakdown of your current grades and assignments</CardDescription>
             </CardHeader>
             <CardContent>
@@ -1596,7 +1596,7 @@ export default function StudentMessages() {
   const messages = [
     {
       id: 1,
-      from: 'Dr. Smith',
+      from: 'Dr. Perera',
       fromEmail: 'smith@university.edu',
       subject: 'Assignment 3 Due Tomorrow',
       preview: 'Just a reminder that Assignment 3 for MATH101 is due tomorrow at 11:59 PM...',
@@ -1612,7 +1612,7 @@ Please make sure to:
 If you have any questions, please don't hesitate to reach out during office hours or via email.
 
 Best regards,
-Dr. Smith`,
+Dr. Perera`,
       timestamp: '2 hours ago',
       read: false,
       starred: true,
@@ -1623,7 +1623,7 @@ Dr. Smith`,
     },
     {
       id: 2,
-      from: 'Prof. Johnson',
+      from: 'Prof. Fernando',
       fromEmail: 'johnson@university.edu',
       subject: 'Lab Schedule Change',
       preview: 'Important update regarding next week\'s physics lab schedule...',
@@ -1639,7 +1639,7 @@ Please update your calendars accordingly. If you have any conflicts with these n
 
 Thank you for your understanding.
 
-Prof. Johnson`,
+Prof. Fernando`,
       timestamp: '5 hours ago',
       read: false,
       starred: false,
@@ -1651,10 +1651,10 @@ Prof. Johnson`,
       from: 'Academic Office',
       fromEmail: 'academic@university.edu',
       subject: 'Semester Results Available',
-      preview: 'Your semester results for Spring 2024 are now available for viewing...',
+      preview: 'Your semester results for Semester 2 are now available for viewing...',
       content: `Dear Student,
 
-We are pleased to inform you that your semester results for Spring 2024 are now available for viewing in your student portal.
+We are pleased to inform you that your semester results for Semester 2 are now available for viewing in your student portal.
 
 To access your results:
 1. Log into the student portal
@@ -1675,7 +1675,7 @@ Academic Office`,
     },
     {
       id: 4,
-      from: 'Dr. Wilson',
+      from: 'Dr. Jayasuriya',
       fromEmail: 'wilson@university.edu',
       subject: 'Project Group Formation',
       preview: 'Please form groups of 3-4 students for the final project...',
@@ -1693,7 +1693,7 @@ Please email me your group members and proposed project topic by Friday, January
 
 Looking forward to seeing your creative projects!
 
-Dr. Wilson`,
+Dr. Jayasuriya`,
       timestamp: '2 days ago',
       read: true,
       starred: false,
@@ -1705,7 +1705,7 @@ Dr. Wilson`,
     },
     {
       id: 5,
-      from: 'Ms. Davis',
+      from: 'Ms. Weerasinghe',
       fromEmail: 'davis@university.edu',
       subject: 'Office Hours This Week',
       preview: 'My office hours schedule for this week has been updated...',
@@ -1723,7 +1723,7 @@ Location: English Department, Room 314
 Feel free to drop by during these times for any questions about the course material or assignments.
 
 Best,
-Ms. Davis`,
+Ms. Weerasinghe`,
       timestamp: '3 days ago',
       read: true,
       starred: false,
@@ -1733,11 +1733,11 @@ Ms. Davis`,
   ]
 
   const teachers = [
-    { name: 'Dr. Smith', email: 'smith@university.edu', subject: 'Mathematics' },
-    { name: 'Prof. Johnson', email: 'johnson@university.edu', subject: 'Physics' },
-    { name: 'Dr. Wilson', email: 'wilson@university.edu', subject: 'Computer Science' },
-    { name: 'Ms. Davis', email: 'davis@university.edu', subject: 'English Literature' },
-    { name: 'Prof. Brown', email: 'brown@university.edu', subject: 'History' },
+    { name: 'Dr. Perera', email: 'smith@university.edu', subject: 'Mathematics' },
+    { name: 'Prof. Fernando', email: 'johnson@university.edu', subject: 'Physics' },
+    { name: 'Dr. Jayasuriya', email: 'wilson@university.edu', subject: 'Computer Science' },
+    { name: 'Ms. Weerasinghe', email: 'davis@university.edu', subject: 'English Literature' },
+    { name: 'Prof. Jayawardena', email: 'brown@university.edu', subject: 'History' },
   ]
 
   const filteredMessages = messages.filter(message => {
@@ -2064,11 +2064,11 @@ import {
 export default function StudentDashboard() {
   // Mock data - in real app this would come from API
   const studentData = {
-    name: 'John Doe',
+    name: 'Kasun Perera',
     studentId: 'STD001',
     currentGPA: 3.75,
     overallAttendance: 92,
-    semester: 'Fall 2024',
+    semester: 'Semester 1',
     unreadMessages: 5,
     totalCredits: 18
   }
@@ -2080,7 +2080,7 @@ export default function StudentDashboard() {
       attendance: 95,
       grade: 'A',
       credits: 4,
-      teacher: 'Dr. Smith',
+      teacher: 'Dr. Perera',
       nextClass: '2024-01-15 10:00 AM'
     },
     {
@@ -2089,7 +2089,7 @@ export default function StudentDashboard() {
       attendance: 88,
       grade: 'B+',
       credits: 4,
-      teacher: 'Prof. Johnson',
+      teacher: 'Prof. Fernando',
       nextClass: '2024-01-15 2:00 PM'
     },
     {
@@ -2098,7 +2098,7 @@ export default function StudentDashboard() {
       attendance: 96,
       grade: 'A',
       credits: 3,
-      teacher: 'Dr. Wilson',
+      teacher: 'Dr. Jayasuriya',
       nextClass: '2024-01-16 9:00 AM'
     },
     {
@@ -2107,7 +2107,7 @@ export default function StudentDashboard() {
       attendance: 90,
       grade: 'A-',
       credits: 3,
-      teacher: 'Ms. Davis',
+      teacher: 'Ms. Weerasinghe',
       nextClass: '2024-01-16 11:00 AM'
     },
     {
@@ -2116,7 +2116,7 @@ export default function StudentDashboard() {
       attendance: 85,
       grade: 'B',
       credits: 4,
-      teacher: 'Prof. Brown',
+      teacher: 'Prof. Jayawardena',
       nextClass: '2024-01-17 1:00 PM'
     }
   ]
@@ -2124,14 +2124,14 @@ export default function StudentDashboard() {
   const recentMessages = [
     {
       id: 1,
-      from: 'Dr. Smith',
+      from: 'Dr. Perera',
       subject: 'Assignment Due Tomorrow',
       timestamp: '2 hours ago',
       unread: true
     },
     {
       id: 2,
-      from: 'Prof. Johnson',
+      from: 'Prof. Fernando',
       subject: 'Lab Schedule Change',
       timestamp: '5 hours ago',
       unread: true
@@ -2428,7 +2428,7 @@ export default function StudentReports() {
     {
       id: 'grade-report',
       title: 'Grade Report - Current Semester',
-      description: 'Detailed grades and performance for Fall 2024',
+      description: 'Detailed grades and performance for Semester 1',
       type: 'academic',
       format: 'PDF',
       size: '180 KB',
@@ -2487,10 +2487,10 @@ export default function StudentReports() {
   }
 
   const semesterOptions = [
-    { value: 'current', label: 'Fall 2024 (Current)' },
-    { value: 'spring2024', label: 'Spring 2024' },
-    { value: 'fall2023', label: 'Fall 2023' },
-    { value: 'spring2023', label: 'Spring 2023' },
+    { value: 'current', label: 'Semester 1 (Current)' },
+    { value: 'spring2024', label: 'Semester 2' },
+    { value: 'fall2023', label: 'Semester 3' },
+    { value: 'spring2023', label: 'Semester 4' },
     { value: 'all', label: 'All Semesters' }
   ]
 
@@ -2926,8 +2926,8 @@ export default function TeacherDashboard() {
   const students = [
     {
       id: 'STD001',
-      name: 'John Doe',
-      email: 'john@student.edu',
+      name: 'Kasun Perera',
+      email: 'kasun@student.lk',
       class: 'cs101',
       attendance: 92,
       currentGrade: 'A',
@@ -2936,8 +2936,8 @@ export default function TeacherDashboard() {
     },
     {
       id: 'STD002',
-      name: 'Jane Smith',
-      email: 'jane@student.edu',
+      name: 'Nadeesha Silva',
+      email: 'nadeesha@student.lk',
       class: 'cs101',
       attendance: 88,
       currentGrade: 'B+',
@@ -2946,8 +2946,8 @@ export default function TeacherDashboard() {
     },
     {
       id: 'STD003',
-      name: 'Mike Wilson',
-      email: 'mike@student.edu',
+      name: 'Ruwan Jayasuriya',
+      email: 'ruwan@student.lk',
       class: 'cs201',
       attendance: 76,
       currentGrade: 'B',
@@ -2956,8 +2956,8 @@ export default function TeacherDashboard() {
     },
     {
       id: 'STD004',
-      name: 'Sarah Davis',
-      email: 'sarah@student.edu',
+      name: 'Ishara Perera',
+      email: 'ishara@student.lk',
       class: 'cs301',
       attendance: 95,
       currentGrade: 'A',
@@ -2966,8 +2966,8 @@ export default function TeacherDashboard() {
     },
     {
       id: 'STD005',
-      name: 'Tom Brown',
-      email: 'tom@student.edu',
+      name: 'Tharindu Gunasekara',
+      email: 'tharindu@student.lk',
       class: 'cs101',
       attendance: 65,
       currentGrade: 'C',
@@ -2991,7 +2991,7 @@ export default function TeacherDashboard() {
     },
     {
       type: 'message',
-      message: 'New message from John Doe regarding project',
+      message: 'New message from Kasun Perera regarding project',
       time: '6 hours ago',
       urgent: false
     }
@@ -3386,8 +3386,8 @@ export default function TeacherStudents() {
   const students = [
     {
       id: 'STD001',
-      name: 'John Doe',
-      email: 'john@student.edu',
+      name: 'Kasun Perera',
+      email: 'kasun@student.lk',
       phone: '+1 (555) 123-4567',
       address: '123 Campus St, University City',
       class: 'cs101',
@@ -3412,8 +3412,8 @@ export default function TeacherStudents() {
     },
     {
       id: 'STD002',
-      name: 'Jane Smith',
-      email: 'jane@student.edu',
+      name: 'Nadeesha Silva',
+      email: 'nadeesha@student.lk',
       phone: '+1 (555) 234-5678',
       address: '456 College Ave, University City',
       class: 'cs101',
@@ -3437,8 +3437,8 @@ export default function TeacherStudents() {
     },
     {
       id: 'STD003',
-      name: 'Mike Wilson',
-      email: 'mike@student.edu',
+      name: 'Ruwan Jayasuriya',
+      email: 'ruwan@student.lk',
       phone: '+1 (555) 345-6789',
       address: '789 Student Blvd, University City',
       class: 'cs201',
@@ -3462,8 +3462,8 @@ export default function TeacherStudents() {
     },
     {
       id: 'STD004',
-      name: 'Sarah Davis',
-      email: 'sarah@student.edu',
+      name: 'Ishara Perera',
+      email: 'ishara@student.lk',
       phone: '+1 (555) 456-7890',
       address: '321 Academy Rd, University City',
       class: 'cs301',
@@ -3487,8 +3487,8 @@ export default function TeacherStudents() {
     },
     {
       id: 'STD005',
-      name: 'Tom Brown',
-      email: 'tom@student.edu',
+      name: 'Tharindu Gunasekara',
+      email: 'tharindu@student.lk',
       phone: '+1 (555) 567-8901',
       address: '654 Scholar St, University City',
       class: 'cs101',
@@ -3585,7 +3585,7 @@ export default function TeacherStudents() {
                 </div>
                 <div className="space-y-2">
                   <Label>Email</Label>
-                  <Input type="email" placeholder="john@student.edu" />
+                  <Input type="email" placeholder="kasun@student.lk" />
                 </div>
                 <div className="space-y-2">
                   <Label>Student ID</Label>
@@ -4262,7 +4262,7 @@ export default function LoginPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="john@example.com"
+                    placeholder="kasun@example.lk"
                     className="pl-9"
                     required
                     disabled={isLoading}

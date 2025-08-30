@@ -32,7 +32,7 @@ export default function StudentAttendance() {
       attended: 23,
       absent: 1,
       trend: 'up',
-      teacher: 'Dr. Smith',
+      teacher: 'Dr. Perera',
       lastClass: '2024-01-12',
       nextClass: '2024-01-15'
     },
@@ -45,7 +45,7 @@ export default function StudentAttendance() {
       attended: 19,
       absent: 3,
       trend: 'down',
-      teacher: 'Prof. Johnson',
+      teacher: 'Prof. Fernando',
       lastClass: '2024-01-11',
       nextClass: '2024-01-15'
     },
@@ -58,7 +58,7 @@ export default function StudentAttendance() {
       attended: 25,
       absent: 1,
       trend: 'up',
-      teacher: 'Dr. Wilson',
+      teacher: 'Dr. Jayasuriya',
       lastClass: '2024-01-12',
       nextClass: '2024-01-16'
     },
@@ -71,7 +71,7 @@ export default function StudentAttendance() {
       attended: 18,
       absent: 2,
       trend: 'stable',
-      teacher: 'Ms. Davis',
+      teacher: 'Ms. Weerasinghe',
       lastClass: '2024-01-10',
       nextClass: '2024-01-16'
     },
@@ -84,7 +84,7 @@ export default function StudentAttendance() {
       attended: 15,
       absent: 3,
       trend: 'down',
-      teacher: 'Prof. Brown',
+      teacher: 'Prof. Jayawardena',
       lastClass: '2024-01-09',
       nextClass: '2024-01-17'
     }

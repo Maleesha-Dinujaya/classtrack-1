@@ -61,7 +61,7 @@ export default function StudentDashboard() {
       attendance: 95,
       grade: 'A',
       credits: 4,
-      teacher: 'Dr. Smith',
+      teacher: 'Dr. Perera',
       nextClass: '2024-01-15 10:00 AM'
     },
     {
@@ -70,7 +70,7 @@ export default function StudentDashboard() {
       attendance: 88,
       grade: 'B+',
       credits: 4,
-      teacher: 'Prof. Johnson',
+      teacher: 'Prof. Fernando',
       nextClass: '2024-01-15 2:00 PM'
     },
     {
@@ -79,7 +79,7 @@ export default function StudentDashboard() {
       attendance: 96,
       grade: 'A',
       credits: 3,
-      teacher: 'Dr. Wilson',
+      teacher: 'Dr. Jayasuriya',
       nextClass: '2024-01-16 9:00 AM'
     },
     {
@@ -88,7 +88,7 @@ export default function StudentDashboard() {
       attendance: 90,
       grade: 'A-',
       credits: 3,
-      teacher: 'Ms. Davis',
+      teacher: 'Ms. Weerasinghe',
       nextClass: '2024-01-16 11:00 AM'
     },
     {
@@ -97,7 +97,7 @@ export default function StudentDashboard() {
       attendance: 85,
       grade: 'B',
       credits: 4,
-      teacher: 'Prof. Brown',
+      teacher: 'Prof. Jayawardena',
       nextClass: '2024-01-17 1:00 PM'
     }
   ]
@@ -105,14 +105,14 @@ export default function StudentDashboard() {
   const recentMessages = [
     {
       id: 1,
-      from: 'Dr. Smith',
+      from: 'Dr. Perera',
       subject: 'Assignment Due Tomorrow',
       timestamp: '2 hours ago',
       unread: true
     },
     {
       id: 2,
-      from: 'Prof. Johnson',
+      from: 'Prof. Fernando',
       subject: 'Lab Schedule Change',
       timestamp: '5 hours ago',
       unread: true

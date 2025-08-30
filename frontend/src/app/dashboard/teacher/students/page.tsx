@@ -87,8 +87,8 @@ export default function TeacherStudents() {
   const [students, setStudents] = useState([
     {
       id: "STD001",
-      name: "Alex Johnson",
-      email: "john@student.edu",
+      name: "Chaminda Fernando",
+      email: "chaminda@student.lk",
       phone: "+1 (555) 123-4567",
       address: "123 Campus St, University City",
       class: "cs101",
@@ -121,8 +121,8 @@ export default function TeacherStudents() {
     },
     {
       id: "STD002",
-      name: "Jane Smith",
-      email: "jane@student.edu",
+      name: "Nadeesha Silva",
+      email: "nadeesha@student.lk",
       phone: "+1 (555) 234-5678",
       address: "456 College Ave, University City",
       class: "cs101",
@@ -150,8 +150,8 @@ export default function TeacherStudents() {
     },
     {
       id: "STD003",
-      name: "Mike Wilson",
-      email: "mike@student.edu",
+      name: "Ruwan Jayasuriya",
+      email: "ruwan@student.lk",
       phone: "+1 (555) 345-6789",
       address: "789 Student Blvd, University City",
       class: "cs201",
@@ -179,8 +179,8 @@ export default function TeacherStudents() {
     },
     {
       id: "STD004",
-      name: "Sarah Davis",
-      email: "sarah@student.edu",
+      name: "Ishara Perera",
+      email: "ishara@student.lk",
       phone: "+1 (555) 456-7890",
       address: "321 Academy Rd, University City",
       class: "cs301",
@@ -208,8 +208,8 @@ export default function TeacherStudents() {
     },
     {
       id: "STD005",
-      name: "Tom Brown",
-      email: "tom@student.edu",
+      name: "Tharindu Gunasekara",
+      email: "tharindu@student.lk",
       phone: "+1 (555) 567-8901",
       address: "654 Scholar St, University City",
       class: "cs101",
@@ -357,7 +357,7 @@ export default function TeacherStudents() {
                   <div className="space-y-2">
                     <Label>First Name</Label>
                     <Input
-                      placeholder="John"
+                      placeholder="Kasun"
                       value={newStudent.firstName}
                       onChange={(e) =>
                         setNewStudent({
@@ -370,7 +370,7 @@ export default function TeacherStudents() {
                   <div className="space-y-2">
                     <Label>Last Name</Label>
                     <Input
-                      placeholder="Doe"
+                      placeholder="Perera"
                       value={newStudent.lastName}
                       onChange={(e) =>
                         setNewStudent({
@@ -384,7 +384,7 @@ export default function TeacherStudents() {
                     <Label>Email</Label>
                     <Input
                       type="email"
-                      placeholder="john@student.edu"
+                      placeholder="kasun@student.lk"
                       value={newStudent.email}
                       onChange={(e) =>
                         setNewStudent({ ...newStudent, email: e.target.value })

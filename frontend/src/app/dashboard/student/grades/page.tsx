@@ -59,7 +59,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A-',
       gpa: 3.7,
-      teacher: 'Dr. Smith'
+      teacher: 'Dr. Perera'
     },
     {
       subject: 'Physics',
@@ -73,7 +73,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'B+',
       gpa: 3.3,
-      teacher: 'Prof. Johnson'
+      teacher: 'Prof. Fernando'
     },
     {
       subject: 'Computer Science',
@@ -87,7 +87,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A',
       gpa: 4.0,
-      teacher: 'Dr. Wilson'
+      teacher: 'Dr. Jayasuriya'
     },
     {
       subject: 'English Literature',
@@ -100,7 +100,7 @@ export default function StudentGrades() {
       ],
       currentGrade: 'A-',
       gpa: 3.7,
-      teacher: 'Ms. Davis'
+      teacher: 'Ms. Weerasinghe'
     },
     {
       subject: 'History',
@@ -113,15 +113,15 @@ export default function StudentGrades() {
       ],
       currentGrade: 'B',
       gpa: 3.0,
-      teacher: 'Prof. Brown'
+      teacher: 'Prof. Jayawardena'
     }
   ]
 
   const semesterHistory = [
-    { semester: 'Fall 2024', gpa: 3.75, credits: 18, status: 'Current' },
-    { semester: 'Spring 2024', gpa: 3.62, credits: 16, status: 'Completed' },
-    { semester: 'Fall 2023', gpa: 3.45, credits: 17, status: 'Completed' },
-    { semester: 'Spring 2023', gpa: 3.80, credits: 17, status: 'Completed' },
+    { semester: 'Semester 1', gpa: 3.75, credits: 18, status: 'Current' },
+    { semester: 'Semester 2', gpa: 3.62, credits: 16, status: 'Completed' },
+    { semester: 'Semester 3', gpa: 3.45, credits: 17, status: 'Completed' },
+    { semester: 'Semester 4', gpa: 3.80, credits: 17, status: 'Completed' },
   ]
 
   const getGradeColor = (grade: string) => {
@@ -265,7 +265,7 @@ export default function StudentGrades() {
           {/* Current Semester Grades */}
           <Card>
             <CardHeader>
-              <CardTitle>Current Semester - Fall 2024</CardTitle>
+              <CardTitle>Current Semester - Semester 1</CardTitle>
               <CardDescription>Detailed breakdown of your current grades and assignments</CardDescription>
             </CardHeader>
             <CardContent>

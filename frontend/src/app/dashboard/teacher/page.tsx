@@ -99,8 +99,8 @@ export default function TeacherDashboard() {
   const students = [
     {
       id: "STD001",
-      name: "Alex Johnson",
-      email: "john@student.edu",
+      name: "Chaminda Fernando",
+      email: "chaminda@student.lk",
       class: "cs101",
       attendance: 92,
       currentGrade: "A",
@@ -109,8 +109,8 @@ export default function TeacherDashboard() {
     },
     {
       id: "STD002",
-      name: "Jane Smith",
-      email: "jane@student.edu",
+      name: "Nadeesha Silva",
+      email: "nadeesha@student.lk",
       class: "cs101",
       attendance: 88,
       currentGrade: "B+",
@@ -119,8 +119,8 @@ export default function TeacherDashboard() {
     },
     {
       id: "STD003",
-      name: "Mike Wilson",
-      email: "mike@student.edu",
+      name: "Ruwan Jayasuriya",
+      email: "ruwan@student.lk",
       class: "cs201",
       attendance: 76,
       currentGrade: "B",
@@ -129,8 +129,8 @@ export default function TeacherDashboard() {
     },
     {
       id: "STD004",
-      name: "Sarah Davis",
-      email: "sarah@student.edu",
+      name: "Ishara Perera",
+      email: "ishara@student.lk",
       class: "cs301",
       attendance: 95,
       currentGrade: "A",
@@ -139,8 +139,8 @@ export default function TeacherDashboard() {
     },
     {
       id: "STD005",
-      name: "Tom Brown",
-      email: "tom@student.edu",
+      name: "Tharindu Gunasekara",
+      email: "tharindu@student.lk",
       class: "cs101",
       attendance: 65,
       currentGrade: "C",
@@ -164,7 +164,7 @@ export default function TeacherDashboard() {
     },
     {
       type: "message",
-      message: "New message from Alex Johnson regarding project",
+      message: "New message from Chaminda Fernando regarding project",
       time: "6 hours ago",
       urgent: false,
     },
@@ -351,15 +351,15 @@ export default function TeacherDashboard() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label>First Name</Label>
-                        <Input placeholder="John" />
+                        <Input placeholder="Kasun" />
                       </div>
                       <div className="space-y-2">
                         <Label>Last Name</Label>
-                        <Input placeholder="Doe" />
+                        <Input placeholder="Perera" />
                       </div>
                       <div className="space-y-2">
                         <Label>Email</Label>
-                        <Input type="email" placeholder="john@student.edu" />
+                        <Input type="email" placeholder="kasun@student.lk" />
                       </div>
                       <div className="space-y-2">
                         <Label>Student ID</Label>
