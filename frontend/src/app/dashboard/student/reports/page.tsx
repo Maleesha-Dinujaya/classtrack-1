@@ -26,7 +26,7 @@ import {
 import { format } from 'date-fns'
 
 export default function StudentReports() {
-  const [selectedSemester, setSelectedSemester] = useState('current')
+  const [selectedSemester, setSelectedSemester] = useState('semester1')
   const [selectedDateRange, setSelectedDateRange] = useState<any>()
   const [selectedReportType, setSelectedReportType] = useState('all')
 
@@ -45,7 +45,7 @@ export default function StudentReports() {
     {
       id: 'grade-report',
       title: 'Grade Report - Current Semester',
-      description: 'Detailed grades and performance for Fall 2024',
+      description: 'Detailed grades and performance for Semester 1',
       type: 'academic',
       format: 'PDF',
       size: '180 KB',
@@ -100,14 +100,18 @@ export default function StudentReports() {
     overallAttendance: 92,
     completedCourses: 18,
     academicStanding: 'Good Standing',
-    expectedGraduation: 'Spring 2026'
+    expectedGraduation: 'Semester 8'
   }
 
   const semesterOptions = [
-    { value: 'current', label: 'Fall 2024 (Current)' },
-    { value: 'spring2024', label: 'Spring 2024' },
-    { value: 'fall2023', label: 'Fall 2023' },
-    { value: 'spring2023', label: 'Spring 2023' },
+    { value: 'semester1', label: 'Semester 1 (Current)' },
+    { value: 'semester2', label: 'Semester 2' },
+    { value: 'semester3', label: 'Semester 3' },
+    { value: 'semester4', label: 'Semester 4' },
+    { value: 'semester5', label: 'Semester 5' },
+    { value: 'semester6', label: 'Semester 6' },
+    { value: 'semester7', label: 'Semester 7' },
+    { value: 'semester8', label: 'Semester 8' },
     { value: 'all', label: 'All Semesters' }
   ]
 

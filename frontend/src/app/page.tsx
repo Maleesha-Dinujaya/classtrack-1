@@ -170,7 +170,7 @@ export default function LoginPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="kasun@example.lk"
                       className="pl-9"
                       required
                       disabled={isLoading}
@@ -232,7 +232,7 @@ export default function LoginPage() {
                     <Input
                       id="firstName"
                       name="firstName"
-                      placeholder="John"
+                      placeholder="Kasun"
                       required
                       disabled={isLoading}
                     />
@@ -242,7 +242,7 @@ export default function LoginPage() {
                     <Input
                       id="lastName"
                       name="lastName"
-                      placeholder="Doe"
+                      placeholder="Perera"
                       required
                       disabled={isLoading}
                     />
@@ -257,7 +257,7 @@ export default function LoginPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="kasun@example.lk"
                       className="pl-9"
                       required
                       disabled={isLoading}

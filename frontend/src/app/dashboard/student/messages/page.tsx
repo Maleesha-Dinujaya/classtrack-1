@@ -39,8 +39,8 @@ export default function StudentMessages() {
   const messages = [
     {
       id: 1,
-      from: 'Dr. Smith',
-      fromEmail: 'smith@university.edu',
+      from: 'Dr. Perera',
+      fromEmail: 'perera@university.lk',
       subject: 'Assignment 3 Due Tomorrow',
       preview: 'Just a reminder that Assignment 3 for MATH101 is due tomorrow at 11:59 PM...',
       content: `Dear students,
@@ -55,7 +55,7 @@ Please make sure to:
 If you have any questions, please don't hesitate to reach out during office hours or via email.
 
 Best regards,
-Dr. Smith`,
+Dr. Perera`,
       timestamp: '2 hours ago',
       read: false,
       starred: true,
@@ -66,8 +66,8 @@ Dr. Smith`,
     },
     {
       id: 2,
-      from: 'Prof. Johnson',
-      fromEmail: 'johnson@university.edu',
+      from: 'Prof. Fernando',
+      fromEmail: 'fernando@university.lk',
       subject: 'Lab Schedule Change',
       preview: 'Important update regarding next week\'s physics lab schedule...',
       content: `Hello Class,
@@ -82,7 +82,7 @@ Please update your calendars accordingly. If you have any conflicts with these n
 
 Thank you for your understanding.
 
-Prof. Johnson`,
+Prof. Fernando`,
       timestamp: '5 hours ago',
       read: false,
       starred: false,
@@ -94,10 +94,10 @@ Prof. Johnson`,
       from: 'Academic Office',
       fromEmail: 'academic@university.edu',
       subject: 'Semester Results Available',
-      preview: 'Your semester results for Spring 2024 are now available for viewing...',
+      preview: 'Your semester results for Semester 1 are now available for viewing...',
       content: `Dear Student,
 
-We are pleased to inform you that your semester results for Spring 2024 are now available for viewing in your student portal.
+We are pleased to inform you that your semester results for Semester 1 are now available for viewing in your student portal.
 
 To access your results:
 1. Log into the student portal
@@ -118,8 +118,8 @@ Academic Office`,
     },
     {
       id: 4,
-      from: 'Dr. Wilson',
-      fromEmail: 'wilson@university.edu',
+      from: 'Dr. Jayasuriya',
+      fromEmail: 'jayasuriya@university.lk',
       subject: 'Project Group Formation',
       preview: 'Please form groups of 3-4 students for the final project...',
       content: `Hi everyone,
@@ -136,7 +136,7 @@ Please email me your group members and proposed project topic by Friday, January
 
 Looking forward to seeing your creative projects!
 
-Dr. Wilson`,
+Dr. Jayasuriya`,
       timestamp: '2 days ago',
       read: true,
       starred: false,
@@ -148,8 +148,8 @@ Dr. Wilson`,
     },
     {
       id: 5,
-      from: 'Ms. Davis',
-      fromEmail: 'davis@university.edu',
+      from: 'Ms. Weerasinghe',
+      fromEmail: 'weerasinghe@university.lk',
       subject: 'Office Hours This Week',
       preview: 'My office hours schedule for this week has been updated...',
       content: `Dear Students,
@@ -166,7 +166,7 @@ Location: English Department, Room 314
 Feel free to drop by during these times for any questions about the course material or assignments.
 
 Best,
-Ms. Davis`,
+Ms. Weerasinghe`,
       timestamp: '3 days ago',
       read: true,
       starred: false,
@@ -176,11 +176,11 @@ Ms. Davis`,
   ]
 
   const teachers = [
-    { name: 'Dr. Smith', email: 'smith@university.edu', subject: 'Mathematics' },
-    { name: 'Prof. Johnson', email: 'johnson@university.edu', subject: 'Physics' },
-    { name: 'Dr. Wilson', email: 'wilson@university.edu', subject: 'Computer Science' },
-    { name: 'Ms. Davis', email: 'davis@university.edu', subject: 'English Literature' },
-    { name: 'Prof. Brown', email: 'brown@university.edu', subject: 'History' },
+    { name: 'Dr. Perera', email: 'perera@university.lk', subject: 'Mathematics' },
+    { name: 'Prof. Fernando', email: 'fernando@university.lk', subject: 'Physics' },
+    { name: 'Dr. Jayasuriya', email: 'jayasuriya@university.lk', subject: 'Computer Science' },
+    { name: 'Ms. Weerasinghe', email: 'weerasinghe@university.lk', subject: 'English Literature' },
+    { name: 'Prof. Jayawardena', email: 'jayawardena@university.lk', subject: 'History' },
   ]
 
   const filteredMessages = messages.filter(message => {
