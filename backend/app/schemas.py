@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import date
 
@@ -22,9 +22,7 @@ class User(UserBase):
     id: int
     role: str
     is_active: bool
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class StudentCreate(UserBase):
@@ -40,9 +38,7 @@ class StudentBase(BaseModel):
 class Student(StudentBase):
     id: int
     user: User
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class StudentUpdate(BaseModel):
@@ -61,9 +57,7 @@ class AttendanceBase(BaseModel):
 class Attendance(AttendanceBase):
     id: int
     teacher_id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class GradeBase(BaseModel):
     subject: str
@@ -72,6 +66,4 @@ class GradeBase(BaseModel):
 
 class Grade(GradeBase):
     id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
