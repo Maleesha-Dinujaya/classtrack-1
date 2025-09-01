@@ -4,7 +4,7 @@ from typing import List
 from .. import models, schemas, auth
 from ..database import get_db
 
-router = APIRouter(prefix="/api/students", tags=["students"])
+router = APIRouter(tags=["students"])
 
 @router.get("/me", response_model=schemas.Student)
 def read_students_me(
