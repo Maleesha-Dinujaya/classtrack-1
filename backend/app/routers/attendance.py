@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Dict
+from typing import List
 from .. import models, schemas, auth
 from ..database import get_db
 
-router = APIRouter(prefix="/api/attendance", tags=["attendance"])
+# Router paths are prefixed in `main.py`, so no prefix here to avoid duplication
+router = APIRouter(tags=["attendance"])
 
 @router.get("", response_model=List[schemas.Attendance])
 def get_attendance(
