@@ -1,5 +1,19 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+/**
+ * Utility to safely build an Authorization header.  Some parts of the
+ * application call the API helpers without explicitly providing a token
+ * which resulted in requests being sent with `undefined` tokens and the
+ * backend responding with "Could not validate credentials".  By reading the
+ * token from `localStorage` when one isn't supplied we ensure that all client
+ * requests include the correct credentials whenever they are available.
+ */
+function authHeader(token?: string) {
+  const t =
+    token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+  return t ? { Authorization: `Bearer ${t}` } : {};
+}
+
 export interface Student {
   id: number;
   user: {
@@ -80,11 +94,9 @@ export const authAPI = {
 
 // Student API calls
 export const studentAPI = {
-  getProfile: async (token: string): Promise<Student> => {
+  getProfile: async (token?: string): Promise<Student> => {
     const response = await fetch(`${API_BASE_URL}/api/students/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeader(token),
     });
 
     if (!response.ok) {
@@ -94,11 +106,9 @@ export const studentAPI = {
     return response.json();
   },
 
-  getAttendance: async (token: string): Promise<Attendance[]> => {
+  getAttendance: async (token?: string): Promise<Attendance[]> => {
     const response = await fetch(`${API_BASE_URL}/api/students/attendance`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeader(token),
     });
 
     if (!response.ok) {
@@ -108,11 +118,9 @@ export const studentAPI = {
     return response.json();
   },
 
-  getGrades: async (token: string): Promise<Grade[]> => {
+  getGrades: async (token?: string): Promise<Grade[]> => {
     const response = await fetch(`${API_BASE_URL}/api/students/grades`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeader(token),
     });
 
     if (!response.ok) {
@@ -125,12 +133,10 @@ export const studentAPI = {
 
 // Teacher API calls
 export const teacherAPI = {
-  getStudents: async (token: string): Promise<Student[]> => {
+  getStudents: async (token?: string): Promise<Student[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: authHeader(token),
       });
 
       if (!response.ok) {
@@ -149,13 +155,10 @@ export const teacherAPI = {
     }
   },
 
-  addStudent: async (token: string, studentData: any) => {
+  addStudent: async (token: string | undefined, studentData: any) => {
     const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { ...authHeader(token), "Content-Type": "application/json" },
       body: JSON.stringify(studentData),
     });
 
@@ -168,13 +171,10 @@ export const teacherAPI = {
     return response.json();
   },
 
-  updateStudent: async (token: string, id: number, studentData: any) => {
+  updateStudent: async (token: string | undefined, id: number, studentData: any) => {
     const response = await fetch(`${API_BASE_URL}/api/teachers/students/${id}`, {
       method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { ...authHeader(token), "Content-Type": "application/json" },
       body: JSON.stringify(studentData),
     });
 
@@ -188,13 +188,10 @@ export const teacherAPI = {
 
 // Attendance API calls
 export const attendanceAPI = {
-  markAttendance: async (token: string, record: any) => {
+  markAttendance: async (token: string | undefined, record: any) => {
     const response = await fetch(`${API_BASE_URL}/api/attendance`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { ...authHeader(token), "Content-Type": "application/json" },
       body: JSON.stringify(record),
     });
 
@@ -205,12 +202,10 @@ export const attendanceAPI = {
     return response.json();
   },
 
-  getAll: async (token: string): Promise<Attendance[]> => {
+  getAll: async (token?: string): Promise<Attendance[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/attendance`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: authHeader(token),
       });
 
       if (!response.ok) {
@@ -229,11 +224,9 @@ export const attendanceAPI = {
     }
   },
 
-  getStats: async (token: string) => {
+  getStats: async (token?: string) => {
     const response = await fetch(`${API_BASE_URL}/api/attendance/stats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeader(token),
     });
 
     if (!response.ok) {
