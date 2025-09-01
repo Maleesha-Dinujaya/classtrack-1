@@ -43,20 +43,32 @@ export default function TeacherAttendance() {
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.token) return;
+      setLoading(true);
       try {
-        setLoading(true);
-        const [studentsData, attendanceData] = await Promise.all([
+        const [studentsResult, attendanceResult] = await Promise.allSettled([
           teacherAPI.getStudents(user.token),
           attendanceAPI.getAll(user.token),
         ]);
-        setStudents(studentsData);
-        setRecords(attendanceData);
-        const uniqueSubjects = Array.from(
-          new Set(attendanceData.map((r) => r.subject))
-        );
-        setSubjects(uniqueSubjects);
-      } catch (error) {
-        console.error("Error loading attendance data:", error);
+
+        if (studentsResult.status === "fulfilled") {
+          setStudents(studentsResult.value);
+        } else {
+          console.error("Error loading students:", studentsResult.reason);
+        }
+
+        if (attendanceResult.status === "fulfilled") {
+          const attendanceData = attendanceResult.value;
+          setRecords(attendanceData);
+          const uniqueSubjects = Array.from(
+            new Set(attendanceData.map((r) => r.subject))
+          );
+          setSubjects(uniqueSubjects);
+        } else {
+          console.error(
+            "Error loading attendance data:",
+            attendanceResult.reason
+          );
+        }
       } finally {
         setLoading(false);
       }
