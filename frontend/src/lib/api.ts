@@ -193,6 +193,20 @@ export const attendanceAPI = {
     return response.json();
   },
 
+  getAll: async (token: string): Promise<Attendance[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/attendance`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch attendance");
+    }
+
+    return response.json();
+  },
+
   getStats: async (token: string) => {
     const response = await fetch(`${API_BASE_URL}/api/attendance/stats`, {
       headers: {

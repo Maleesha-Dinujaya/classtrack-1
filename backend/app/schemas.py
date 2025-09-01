@@ -60,6 +60,7 @@ class AttendanceBase(BaseModel):
 
 class Attendance(AttendanceBase):
     id: int
+    teacher_id: int
 
     class Config:
         orm_mode = True

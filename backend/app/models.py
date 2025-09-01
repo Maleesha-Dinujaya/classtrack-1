@@ -37,17 +37,20 @@ class Teacher(Base):
     department = Column(String)
 
     user = relationship("User", back_populates="teacher")
+    attendance = relationship("Attendance", back_populates="teacher")
 
 class Attendance(Base):
     __tablename__ = "attendance"
 
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("students.id"))
+    teacher_id = Column(Integer, ForeignKey("teachers.id"))
     date = Column(Date)
     status = Column(String)
     subject = Column(String)
 
     student = relationship("Student", back_populates="attendance")
+    teacher = relationship("Teacher", back_populates="attendance")
 
 class Grade(Base):
     __tablename__ = "grades"

@@ -6,6 +6,13 @@ from ..database import get_db
 
 router = APIRouter(prefix="/api/attendance", tags=["attendance"])
 
+@router.get("", response_model=List[schemas.Attendance])
+def get_attendance(
+    current_user: models.User = Depends(auth.get_current_active_teacher),
+    db: Session = Depends(get_db),
+):
+    return db.query(models.Attendance).all()
+
 @router.post("", response_model=schemas.Attendance)
 def mark_attendance(
     record: schemas.AttendanceBase,
@@ -17,6 +24,7 @@ def mark_attendance(
         raise HTTPException(status_code=404, detail="Student not found")
     db_record = models.Attendance(
         student_id=record.student_id,
+        teacher_id=current_user.teacher.id,
         date=record.date,
         status=record.status,
         subject=record.subject,
