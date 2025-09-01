@@ -160,7 +160,9 @@ export const teacherAPI = {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to add student");
+      const errorData = await response.json().catch(() => ({}));
+      const message = (errorData as any).detail || "Failed to add student";
+      throw new Error(message);
     }
 
     return response.json();
