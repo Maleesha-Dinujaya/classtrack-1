@@ -1,335 +1,103 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/ui/tabs'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import {
-  GraduationCap,
-  BookOpen,
-  Mail,
-  Lock,
-  School,
-  Loader2
-} from 'lucide-react'
-import { authApi } from '@/lib/api'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { GraduationCap } from 'lucide-react'
 
-export default function LoginPage() {
-  const { login } = useAuth()
-  const [isLoading, setIsLoading] = useState(false)
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+export default function Home() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState('student')
   const [error, setError] = useState('')
+  const { login, loading } = useAuth()
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError('')
-
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-
     try {
-      const { access_token } = await authApi.login(email, password)
-
-      localStorage.setItem('access_token', access_token)
-
-      // Decode JWT to extract role and email
-      const decoded = JSON.parse(atob(access_token.split('.')[1]))
-      login({
-        name: '',
-        email: decoded.sub,
-        role: decoded.role,
-      })
-
-      // Redirect based on role
-      window.location.href = `/dashboard/${decoded.role}`
+      await login(email, password, role)
+      window.location.href = `/dashboard/${role}`
     } catch (err: any) {
-      setError(err?.detail || err.message || 'Login failed')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
-
-    const formData = new FormData(e.currentTarget)
-    const userData = {
-      firstName: formData.get('firstName') as string,
-      lastName: formData.get('lastName') as string,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      confirmPassword: formData.get('confirmPassword') as string,
-      role: formData.get('role') as string
-    }
-
-    if (userData.password !== userData.confirmPassword) {
-      setError('Passwords do not match')
-      setIsLoading(false)
-      return
-    }
-
-    try {
-      await authApi.register(userData)
-      setAuthMode('login')
-      setError('')
-    } catch (err: any) {
-      setError(err?.detail || err.message || 'Registration failed')
-    } finally {
-      setIsLoading(false)
+      setError(err.message || 'Login failed. Please try again.')
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-primary p-3 rounded-xl">
+            <div className="bg-primary p-3 rounded-lg">
               <GraduationCap className="h-8 w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">ClassTrack</h1>
-          <p className="text-gray-600">Student Attendance & Grade Management</p>
-        </div>
-
-        <Card className="shadow-lg border-0">
-          <CardHeader className="space-y-1">
-            <Tabs
-              value={authMode}
-              onValueChange={(value) => {
-                setAuthMode(value as 'login' | 'register')
-                setError('')
-              }}
-              className="w-full"
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="login" className="space-y-4 mt-6">
-                <div className="space-y-2 text-center">
-                  <CardTitle className="text-2xl">Welcome back</CardTitle>
-                  <CardDescription>
-                    Enter your credentials to access your account
-                  </CardDescription>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="register" className="space-y-4 mt-6">
-                <div className="space-y-2 text-center">
-                  <CardTitle className="text-2xl">Create account</CardTitle>
-                  <CardDescription>
-                    Set up your ClassTrack account
-                  </CardDescription>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardHeader>
-
-          <CardContent>
+          <CardTitle className="text-2xl font-bold text-center text-gray-900">
+            ClassTrack
+          </CardTitle>
+          <CardDescription className="text-center">
+            Sign in to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+              <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm">
                 {error}
               </div>
             )}
-
-            {authMode === 'login' ? (
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="kasun@example.lk"
-                      className="pl-9"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="••••••••"
-                      className="pl-9"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  )}
-                  Sign In
-                </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="role">I am a</Label>
-                  <Select name="role" required>
-                    <SelectTrigger id="role">
-                      <SelectValue placeholder="Select your role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="student">
-                        <div className="flex items-center">
-                          <BookOpen className="h-4 w-4 mr-2" />
-                          Student
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="teacher">
-                        <div className="flex items-center">
-                          <School className="h-4 w-4 mr-2" />
-                          Teacher
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      placeholder="Kasun"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      placeholder="Perera"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="kasun@example.lk"
-                      className="pl-9"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="••••••••"
-                      className="pl-9"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="••••••••"
-                      className="pl-9"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  )}
-                  Create Account
-                </Button>
-              </form>
-            )}
-          </CardContent>
-
-          {authMode === 'login' && (
-            <CardFooter className="flex flex-col space-y-3">
-              <Button variant="link" className="text-sm text-gray-600">
-                Forgot your password?
-              </Button>
-              <div className="text-sm text-gray-600 text-center">
-                Don't have an account?{' '}
-                <Button
-                  variant="link"
-                  className="p-0 h-auto text-primary"
-                  onClick={() => setAuthMode('register')}
-                >
-                  Sign up here
-                </Button>
-              </div>
-            </CardFooter>
-          )}
-        </Card>
-
-        <div className="text-center mt-6 text-sm text-gray-500">
-          Secure and trusted by educational institutions worldwide
-        </div>
-      </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">I am a</Label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="teacher">Teacher</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign in'}
+            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm text-gray-600">
+            Demo Credentials:
+            <div className="mt-2 space-y-1">
+              <div>Teacher: teacher@example.com / secret</div>
+              <div>Student: student@example.com / pass123</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
+
