@@ -36,17 +36,20 @@ export const authAPI = {
     const formData = new URLSearchParams();
     formData.append('username', email);
     formData.append('password', password);
+    formData.append('grant_type', 'password'); // keep grant_type from codex branch
 
     const response = await fetch(`${API_BASE_URL}/api/auth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: formData,
+      body: formData.toString(), // use .toString() for URLSearchParams
     });
 
     if (!response.ok) {
-      throw new Error('Login failed');
+      const errorData = await response.json().catch(() => ({}));
+      const message = (errorData as any).detail || 'Login failed';
+      throw new Error(message);
     }
 
     return response.json();
@@ -165,4 +168,3 @@ export const attendanceAPI = {
     return response.json();
   },
 };
-
