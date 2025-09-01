@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -33,6 +32,7 @@ export default function TeacherAttendance() {
   const { user } = useAuth();
   const [students, setStudents] = useState<Student[]>([]);
   const [records, setRecords] = useState<Attendance[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [newRecord, setNewRecord] = useState({
     student_id: "",
@@ -51,6 +51,10 @@ export default function TeacherAttendance() {
         ]);
         setStudents(studentsData);
         setRecords(attendanceData);
+        const uniqueSubjects = Array.from(
+          new Set(attendanceData.map((r) => r.subject))
+        );
+        setSubjects(uniqueSubjects);
       } catch (error) {
         console.error("Error loading attendance data:", error);
       } finally {
@@ -70,6 +74,9 @@ export default function TeacherAttendance() {
         date: new Date().toISOString().split("T")[0],
       });
       setRecords([record, ...records]);
+      if (!subjects.includes(record.subject)) {
+        setSubjects([...subjects, record.subject]);
+      }
       setNewRecord({ student_id: "", subject: "", status: "present" });
     } catch (error) {
       console.error("Error marking attendance:", error);
@@ -107,7 +114,7 @@ export default function TeacherAttendance() {
                 <SelectContent>
                   {students.map((s) => (
                     <SelectItem key={s.id} value={String(s.id)}>
-                      {s.user.name}
+                      {s.user.name} ({s.student_id})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -115,13 +122,23 @@ export default function TeacherAttendance() {
             </div>
             <div>
               <Label>Subject</Label>
-              <Input
+              <Select
                 value={newRecord.subject}
-                onChange={(e) =>
-                  setNewRecord({ ...newRecord, subject: e.target.value })
+                onValueChange={(v) =>
+                  setNewRecord({ ...newRecord, subject: v })
                 }
-                placeholder="Subject"
-              />
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subjects.map((subject) => (
+                    <SelectItem key={subject} value={subject}>
+                      {subject}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label>Status</Label>
