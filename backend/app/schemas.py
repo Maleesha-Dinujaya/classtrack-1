@@ -44,6 +44,14 @@ class Student(StudentBase):
     class Config:
         orm_mode = True
 
+
+class StudentUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    grade_level: Optional[str] = None
+    department: Optional[str] = None
+    is_active: Optional[bool] = None
+
 class AttendanceBase(BaseModel):
     student_id: int
     date: date

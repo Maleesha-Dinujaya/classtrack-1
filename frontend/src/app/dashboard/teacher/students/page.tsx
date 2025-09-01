@@ -29,6 +29,13 @@ export default function TeacherStudentsPage() {
     grade_level: '',
     department: ''
   })
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null)
+  const [editData, setEditData] = useState({
+    name: '',
+    grade_level: '',
+    department: ''
+  })
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -72,6 +79,29 @@ export default function TeacherStudentsPage() {
       setNewStudent({ email: '', password: '', name: '', grade_level: '', department: '' })
     } catch (error) {
       console.error('Error adding student:', error)
+    }
+  }
+
+  const openEditDialog = (student: Student) => {
+    setEditingStudent(student)
+    setEditData({
+      name: student.user.name,
+      grade_level: student.grade_level,
+      department: student.department
+    })
+    setIsEditDialogOpen(true)
+  }
+
+  const handleUpdateStudent = async () => {
+    if (!user?.token || !editingStudent) return
+    try {
+      await teacherAPI.updateStudent(user.token, editingStudent.id, editData)
+      const studentsData = await teacherAPI.getStudents(user.token)
+      setStudents(studentsData)
+      setIsEditDialogOpen(false)
+      setEditingStudent(null)
+    } catch (error) {
+      console.error('Error updating student:', error)
     }
   }
 
@@ -170,6 +200,51 @@ export default function TeacherStudentsPage() {
         </Dialog>
       </div>
 
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Student</DialogTitle>
+            <DialogDescription>
+              Update the student's information.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-name">Full Name</Label>
+              <Input
+                id="edit-name"
+                value={editData.name}
+                onChange={(e) => setEditData({...editData, name: e.target.value})}
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-grade">Grade Level</Label>
+              <Input
+                id="edit-grade"
+                value={editData.grade_level}
+                onChange={(e) => setEditData({...editData, grade_level: e.target.value})}
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-department">Department</Label>
+              <Input
+                id="edit-department"
+                value={editData.department}
+                onChange={(e) => setEditData({...editData, department: e.target.value})}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateStudent}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <CardContent className="pt-6">
           <div className="flex gap-4">
@@ -245,7 +320,7 @@ export default function TeacherStudentsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Button size="sm" variant="ghost">
+                        <Button size="sm" variant="ghost" onClick={() => openEditDialog(student)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button size="sm" variant="ghost">

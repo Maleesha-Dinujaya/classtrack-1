@@ -155,6 +155,23 @@ export const teacherAPI = {
 
     return response.json();
   },
+
+  updateStudent: async (token: string, id: number, studentData: any) => {
+    const response = await fetch(`${API_BASE_URL}/api/teachers/students/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update student");
+    }
+
+    return response.json();
+  },
 };
 
 // Attendance API calls

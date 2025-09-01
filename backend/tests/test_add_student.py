@@ -9,11 +9,12 @@ from backend.app import models, schemas, auth  # noqa: E402
 from backend.app.routers.teachers import add_student  # noqa: E402
 from backend.app.database import Base  # noqa: E402
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test_add.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 def test_add_student_function():
