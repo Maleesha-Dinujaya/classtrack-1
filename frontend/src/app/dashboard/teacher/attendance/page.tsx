@@ -26,13 +26,14 @@ import {
 } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
+import { useSubjects } from "@/context/SubjectsContext";
 import { attendanceAPI, teacherAPI, Attendance, Student } from "@/lib/api";
 
 export default function TeacherAttendance() {
   const { user } = useAuth();
   const [students, setStudents] = useState<Student[]>([]);
   const [records, setRecords] = useState<Attendance[]>([]);
-  const [subjects, setSubjects] = useState<string[]>([]);
+  const { subjects, addSubject } = useSubjects();
   const [loading, setLoading] = useState(true);
   const [newRecord, setNewRecord] = useState({
     student_id: "",
@@ -62,7 +63,7 @@ export default function TeacherAttendance() {
           const uniqueSubjects = Array.from(
             new Set(attendanceData.map((r) => r.subject))
           );
-          setSubjects(uniqueSubjects);
+          uniqueSubjects.forEach((s) => addSubject(s));
         } else {
           console.error(
             "Error loading attendance data:",
@@ -74,7 +75,7 @@ export default function TeacherAttendance() {
       }
     };
     fetchData();
-  }, [user]);
+  }, [user, addSubject]);
 
   const handleSubmit = async () => {
     if (!user?.token || !newRecord.student_id || !newRecord.subject) return;
@@ -86,9 +87,7 @@ export default function TeacherAttendance() {
         date: new Date().toISOString().split("T")[0],
       });
       setRecords([record, ...records]);
-      if (!subjects.includes(record.subject)) {
-        setSubjects([...subjects, record.subject]);
-      }
+      addSubject(record.subject);
       setNewRecord({ student_id: "", subject: "", status: "present" });
     } catch (error) {
       console.error("Error marking attendance:", error);

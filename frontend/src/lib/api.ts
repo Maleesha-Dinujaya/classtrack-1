@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
  * token from `localStorage` when one isn't supplied we ensure that all client
  * requests include the correct credentials whenever they are available.
  */
-function authHeader(token?: string) {
+function authHeader(token?: string): Record<string, string> {
   const t =
     token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
   return t ? { Authorization: `Bearer ${t}` } : {};
