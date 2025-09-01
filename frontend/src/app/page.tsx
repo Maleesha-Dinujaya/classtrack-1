@@ -1,31 +1,44 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useAuth } from '@/context/AuthContext'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { GraduationCap } from 'lucide-react'
+import { useState } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { GraduationCap } from "lucide-react";
 
 export default function Home() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState('student')
-  const [error, setError] = useState('')
-  const { login, loading } = useAuth()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student");
+  const [error, setError] = useState("");
+  const { login, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError("");
     try {
-      await login(email, password, role)
-      window.location.href = `/dashboard/${role}`
+      await login(email, password, role);
+      window.location.href = `/dashboard/${role}`;
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.')
+      setError(err.message || "Login failed. Please try again.");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -85,19 +98,17 @@ export default function Home() {
               </Select>
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm text-gray-600">
-            Demo Credentials:
-            <div className="mt-2 space-y-1">
-              <div>Teacher: teacher@example.com / secret</div>
-              <div>Student: student@example.com / pass123</div>
-            </div>
+          <div className="mt-4 text-center text-sm">
+            Don't have an account?{" "}
+            <Link href="/register" className="text-primary hover:underline">
+              Sign up
+            </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

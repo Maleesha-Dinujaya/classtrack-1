@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export interface Student {
   id: number;
@@ -34,21 +34,43 @@ export interface Grade {
 export const authAPI = {
   login: async (email: string, password: string) => {
     const formData = new URLSearchParams();
-    formData.append('username', email);
-    formData.append('password', password);
-    formData.append('grant_type', 'password'); // keep grant_type from codex branch
+    formData.append("username", email);
+    formData.append("password", password);
+    formData.append("grant_type", "password"); // keep grant_type from codex branch
 
     const response = await fetch(`${API_BASE_URL}/api/auth/token`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: formData.toString(), // use .toString() for URLSearchParams
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const message = (errorData as any).detail || 'Login failed';
+      const message = (errorData as any).detail || "Login failed";
+      throw new Error(message);
+    }
+
+    return response.json();
+  },
+  register: async (data: {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const message = (errorData as any).detail || "Registration failed";
       throw new Error(message);
     }
 
@@ -61,12 +83,12 @@ export const studentAPI = {
   getProfile: async (token: string): Promise<Student> => {
     const response = await fetch(`${API_BASE_URL}/api/students/me`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch student profile');
+      throw new Error("Failed to fetch student profile");
     }
 
     return response.json();
@@ -75,12 +97,12 @@ export const studentAPI = {
   getAttendance: async (token: string): Promise<Attendance[]> => {
     const response = await fetch(`${API_BASE_URL}/api/students/attendance`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch attendance');
+      throw new Error("Failed to fetch attendance");
     }
 
     return response.json();
@@ -89,12 +111,12 @@ export const studentAPI = {
   getGrades: async (token: string): Promise<Grade[]> => {
     const response = await fetch(`${API_BASE_URL}/api/students/grades`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch grades');
+      throw new Error("Failed to fetch grades");
     }
 
     return response.json();
@@ -106,12 +128,12 @@ export const teacherAPI = {
   getStudents: async (token: string): Promise<Student[]> => {
     const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch students');
+      throw new Error("Failed to fetch students");
     }
 
     return response.json();
@@ -119,16 +141,16 @@ export const teacherAPI = {
 
   addStudent: async (token: string, studentData: any) => {
     const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(studentData),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to add student');
+      throw new Error("Failed to add student");
     }
 
     return response.json();
@@ -139,16 +161,16 @@ export const teacherAPI = {
 export const attendanceAPI = {
   markAttendance: async (token: string, record: any) => {
     const response = await fetch(`${API_BASE_URL}/api/attendance`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(record),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to mark attendance');
+      throw new Error("Failed to mark attendance");
     }
 
     return response.json();
@@ -157,12 +179,12 @@ export const attendanceAPI = {
   getStats: async (token: string) => {
     const response = await fetch(`${API_BASE_URL}/api/attendance/stats`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch attendance stats');
+      throw new Error("Failed to fetch attendance stats");
     }
 
     return response.json();
