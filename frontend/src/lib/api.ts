@@ -36,14 +36,14 @@ export const authAPI = {
     const formData = new URLSearchParams();
     formData.append('username', email);
     formData.append('password', password);
-    formData.append('grant_type', 'password');
+    formData.append('grant_type', 'password'); // keep grant_type from codex branch
 
     const response = await fetch(`${API_BASE_URL}/api/auth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: formData.toString(),
+      body: formData.toString(), // use .toString() for URLSearchParams
     });
 
     if (!response.ok) {
@@ -168,4 +168,3 @@ export const attendanceAPI = {
     return response.json();
   },
 };
-
