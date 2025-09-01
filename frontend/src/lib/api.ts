@@ -126,17 +126,27 @@ export const studentAPI = {
 // Teacher API calls
 export const teacherAPI = {
   getStudents: async (token: string): Promise<Student[]> => {
-    const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/teachers/students`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const message = (errorData as any).detail || "Failed to fetch students";
+        throw new Error(message);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Failed to fetch students", error);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error("Failed to fetch students");
     }
-
-    return response.json();
   },
 
   addStudent: async (token: string, studentData: any) => {
@@ -194,17 +204,27 @@ export const attendanceAPI = {
   },
 
   getAll: async (token: string): Promise<Attendance[]> => {
-    const response = await fetch(`${API_BASE_URL}/api/attendance`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/attendance`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const message = (errorData as any).detail || "Failed to fetch attendance";
+        throw new Error(message);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Failed to fetch attendance", error);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error("Failed to fetch attendance");
     }
-
-    return response.json();
   },
 
   getStats: async (token: string) => {
