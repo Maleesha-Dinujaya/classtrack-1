@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine, Base
+from .database import init_db
 from .routers import auth, attendance, students, teachers
 
 app = FastAPI()
@@ -13,7 +13,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+def on_startup() -> None:
+    """Run database migrations when the application starts."""
+    init_db()
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(attendance.router, prefix="/api/attendance", tags=["attendance"])
