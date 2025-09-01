@@ -1,154 +1,78 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useAuth } from '@/context/AuthContext'
-import apiFetch from '@/lib/api'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { studentAPI, Student, Attendance, Grade } from '@/lib/api'
 import {
   Calendar,
-  TrendingUp,
-  MessageSquare,
   Download,
   BookOpen,
-  Clock,
   CheckCircle,
-  AlertCircle,
-  Users,
   GraduationCap
 } from 'lucide-react'
 
 export default function StudentDashboard() {
   const { user } = useAuth()
-  const [studentData, setStudentData] = useState<any | null>(null)
+  const [studentData, setStudentData] = useState<Student | null>(null)
+  const [attendance, setAttendance] = useState<Attendance[]>([])
+  const [grades, setGrades] = useState<Grade[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiFetch('/api/students/me')
-      .then((res) => res.json())
-      .then((data: any) =>
-        setStudentData({
-          name: data.user?.name ?? user?.name ?? '',
-          studentId: data.student_id,
-          currentGPA: 0,
-          overallAttendance: 0,
-          semester: '',
-          unreadMessages: 0,
-          totalCredits: 0,
-        })
-      )
-      .catch((err: any) => console.error(err))
-  }, [user?.name])
-
-  if (!studentData) {
-    return <div>Loading...</div>
-  }
-
-  const subjects = [
-    {
-      name: 'Mathematics',
-      code: 'MATH101',
-      attendance: 95,
-      grade: 'A',
-      credits: 4,
-      teacher: 'Dr. Perera',
-      nextClass: '2024-01-15 10:00 AM'
-    },
-    {
-      name: 'Physics',
-      code: 'PHY201',
-      attendance: 88,
-      grade: 'B+',
-      credits: 4,
-      teacher: 'Prof. Fernando',
-      nextClass: '2024-01-15 2:00 PM'
-    },
-    {
-      name: 'Computer Science',
-      code: 'CS101',
-      attendance: 96,
-      grade: 'A',
-      credits: 3,
-      teacher: 'Dr. Jayasuriya',
-      nextClass: '2024-01-16 9:00 AM'
-    },
-    {
-      name: 'English Literature',
-      code: 'ENG301',
-      attendance: 90,
-      grade: 'A-',
-      credits: 3,
-      teacher: 'Ms. Weerasinghe',
-      nextClass: '2024-01-16 11:00 AM'
-    },
-    {
-      name: 'History',
-      code: 'HIS201',
-      attendance: 85,
-      grade: 'B',
-      credits: 4,
-      teacher: 'Prof. Jayawardena',
-      nextClass: '2024-01-17 1:00 PM'
+    const fetchData = async () => {
+      if (!user?.token) return
+      try {
+        setLoading(true)
+        const [profileData, attendanceData, gradesData] = await Promise.all([
+          studentAPI.getProfile(user.token),
+          studentAPI.getAttendance(user.token),
+          studentAPI.getGrades(user.token)
+        ])
+        setStudentData(profileData)
+        setAttendance(attendanceData)
+        setGrades(gradesData)
+      } catch (error) {
+        console.error('Error fetching student data:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+    fetchData()
+  }, [user])
 
-  const recentMessages = [
-    {
-      id: 1,
-      from: 'Dr. Perera',
-      subject: 'Assignment Due Tomorrow',
-      timestamp: '2 hours ago',
-      unread: true
-    },
-    {
-      id: 2,
-      from: 'Prof. Fernando',
-      subject: 'Lab Schedule Change',
-      timestamp: '5 hours ago',
-      unread: true
-    },
-    {
-      id: 3,
-      from: 'Academic Office',
-      subject: 'Semester Results Available',
-      timestamp: '1 day ago',
-      unread: false
-    }
-  ]
+  const overallAttendance = attendance.length > 0
+    ? Math.round((attendance.filter(a => a.status === 'present').length / attendance.length) * 100)
+    : 0
 
-  const getAttendanceColor = (percentage: number) => {
-    if (percentage >= 90) return 'text-green-600'
-    if (percentage >= 75) return 'text-yellow-600'
-    return 'text-red-600'
-  }
+  const currentGPA = grades.length > 0
+    ? grades.reduce((sum, grade) => sum + grade.grade, 0) / grades.length
+    : 0
 
-  const getGradeColor = (grade: string) => {
-    if (grade.startsWith('A')) return 'bg-green-100 text-green-800'
-    if (grade.startsWith('B')) return 'bg-blue-100 text-blue-800'
-    if (grade.startsWith('C')) return 'bg-yellow-100 text-yellow-800'
-    return 'bg-red-100 text-red-800'
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back, {studentData.name}!
+            Welcome back, {studentData?.user.name}!
           </h1>
           <p className="text-gray-600">
-            Student ID: {studentData.studentId} • {studentData.semester}
+            Student ID: {studentData?.student_id} • {studentData?.grade_level}
           </p>
         </div>
         <Button variant="outline" className="flex items-center gap-2">
@@ -157,205 +81,146 @@ export default function StudentDashboard() {
         </Button>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Overall Attendance */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Overall Attendance</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{studentData.overallAttendance}%</div>
-            <Progress value={studentData.overallAttendance} className="mt-2" />
+            <div className="text-2xl font-bold">{overallAttendance}%</div>
+            <Progress value={overallAttendance} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-2">
-              {studentData.overallAttendance >= 90 ? 'Excellent attendance!' : 'Keep improving'}
+              {overallAttendance >= 90 ? 'Excellent attendance!' : 'Keep improving'}
             </p>
           </CardContent>
         </Card>
 
-        {/* Current GPA */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Current GPA</CardTitle>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{studentData.currentGPA}</div>
-            <div className="flex items-center text-xs text-green-600 mt-1">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              +0.2 from last semester
-            </div>
+            <div className="text-2xl font-bold">{currentGPA.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Out of 4.0 scale
             </p>
           </CardContent>
         </Card>
 
-        {/* Messages */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Messages</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{studentData.unreadMessages}</div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Unread messages
-            </p>
-            <Button variant="link" className="text-xs p-0 h-auto mt-1">
-              View all messages →
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Total Credits */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Credits Enrolled</CardTitle>
+            <CardTitle className="text-sm font-medium">Grades Recorded</CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{studentData.totalCredits}</div>
+            <div className="text-2xl font-bold">{grades.length}</div>
             <p className="text-xs text-muted-foreground mt-2">
-              Credit hours this semester
+              Grades available
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Classes Attended</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {attendance.filter(a => a.status === 'present').length}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Out of {attendance.length} total
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Subjects Overview */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>My Subjects</CardTitle>
-              <CardDescription>
-                Attendance and grade overview for current semester
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Teacher</TableHead>
-                    <TableHead>Attendance</TableHead>
-                    <TableHead>Grade</TableHead>
-                    <TableHead>Credits</TableHead>
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Grades</CardTitle>
+          <CardDescription>
+            Your most recent grades across all subjects
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {grades.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Subject</TableHead>
+                  <TableHead>Assignment Type</TableHead>
+                  <TableHead>Grade</TableHead>
+                  <TableHead>Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {grades.slice(0, 5).map((grade) => (
+                  <TableRow key={grade.id}>
+                    <TableCell className="font-medium">{grade.subject}</TableCell>
+                    <TableCell>{grade.assignment_type}</TableCell>
+                    <TableCell>
+                      <Badge variant={grade.grade >= 80 ? 'default' : 'destructive'}>
+                        {grade.grade}%
+                      </Badge>
+                    </TableCell>
+                    <TableCell>Recent</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {subjects.map((subject) => (
-                    <TableRow key={subject.code}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{subject.name}</div>
-                          <div className="text-sm text-gray-500">{subject.code}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{subject.teacher}</TableCell>
-                      <TableCell>
-                        <div className={`font-medium ${getAttendanceColor(subject.attendance)}`}>
-                          {subject.attendance}%
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getGradeColor(subject.grade)}>
-                          {subject.grade}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{subject.credits}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No grades recorded yet.
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-        {/* Right Sidebar */}
-        <div className="space-y-6">
-          {/* Upcoming Classes */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Upcoming Classes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {subjects.slice(0, 3).map((subject) => (
-                <div key={subject.code} className="flex items-start space-x-3">
-                  <div className="bg-primary/10 p-2 rounded-lg">
-                    <BookOpen className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm">{subject.name}</p>
-                    <p className="text-xs text-gray-500">{subject.nextClass}</p>
-                    <p className="text-xs text-gray-500">{subject.teacher}</p>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Recent Messages */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-4 w-4" />
-                Recent Messages
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {recentMessages.map((message) => (
-                <div key={message.id} className="flex items-start space-x-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="text-xs">
-                      {message.from.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1">
-                      <p className="font-medium text-sm truncate">{message.from}</p>
-                      {message.unread && (
-                        <div className="h-2 w-2 bg-primary rounded-full" />
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-600 truncate">{message.subject}</p>
-                    <p className="text-xs text-gray-500">{message.timestamp}</p>
-                  </div>
-                </div>
-              ))}
-              <Button variant="outline" className="w-full text-sm">
-                View All Messages
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
-                <Calendar className="h-4 w-4 mr-2" />
-                View Full Schedule
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <GraduationCap className="h-4 w-4 mr-2" />
-                Calculate GPA
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Download className="h-4 w-4 mr-2" />
-                Download Transcripts
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Attendance</CardTitle>
+          <CardDescription>
+            Your most recent class attendance records
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {attendance.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Subject</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {attendance.slice(0, 5).map((record) => (
+                  <TableRow key={record.id}>
+                    <TableCell>{new Date(record.date).toLocaleDateString()}</TableCell>
+                    <TableCell>{record.subject}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={record.status === 'present' ? 'default' : 'destructive'}
+                        className={record.status === 'present' ? 'bg-green-100 text-green-800' : ''}
+                      >
+                        {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No attendance records yet.
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
+
