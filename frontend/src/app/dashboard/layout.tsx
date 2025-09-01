@@ -15,6 +15,7 @@ import {
   LogOut,
   Users,
   FileText,
+  BookOpen,
   Bell,
   Menu,
   X
@@ -46,6 +47,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const teacherNavItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard/teacher' },
     { icon: Users, label: 'Students', href: '/dashboard/teacher/students' },
+    { icon: BookOpen, label: 'Subjects', href: '/dashboard/teacher/subjects' },
     { icon: Calendar, label: 'Attendance', href: '/dashboard/teacher/attendance' },
     { icon: GraduationCapIcon, label: 'Grades', href: '/dashboard/teacher/grades' },
     { icon: MessageSquare, label: 'Messages', href: '/dashboard/teacher/messages' },
