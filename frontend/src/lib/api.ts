@@ -9,8 +9,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
  * requests include the correct credentials whenever they are available.
  */
 function authHeader(token?: string): Record<string, string> {
-  const t =
-    token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+  // Prefer an explicitly provided token but fall back to a value stored in
+  // localStorage when running in the browser.  Using the nullish coalescing
+  // operator avoids treating an empty string as a missing token.
+  const t = token ??
+    (typeof window !== "undefined" ? localStorage.getItem("token") ?? undefined : undefined);
   return t ? { Authorization: `Bearer ${t}` } : {};
 }
 
