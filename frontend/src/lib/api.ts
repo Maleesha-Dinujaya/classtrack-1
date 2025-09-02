@@ -184,6 +184,30 @@ export const teacherAPI = {
 
     return response.json();
   },
+  getGrades: async (token?: string): Promise<Grade[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/teachers/grades`, {
+      headers: authHeader(token),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch grades");
+    }
+
+    return response.json();
+  },
+  addGrade: async (token: string | undefined, gradeData: any) => {
+    const response = await fetch(`${API_BASE_URL}/api/teachers/grades`, {
+      method: "POST",
+      headers: { ...authHeader(token), "Content-Type": "application/json" },
+      body: JSON.stringify(gradeData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add grade");
+    }
+
+    return response.json();
+  },
 };
 
 // Attendance API calls

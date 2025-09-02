@@ -64,6 +64,10 @@ class GradeBase(BaseModel):
     grade: float
     assignment_type: str
 
+class GradeCreate(GradeBase):
+    student_id: int
+
 class Grade(GradeBase):
     id: int
+    student_id: int
     model_config = ConfigDict(from_attributes=True)
