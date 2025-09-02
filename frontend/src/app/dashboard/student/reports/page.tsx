@@ -149,7 +149,7 @@ export default function StudentReports() {
       case 'error':
         return 'bg-red-100 text-red-800'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
     }
   }
 
@@ -162,9 +162,9 @@ export default function StudentReports() {
       case 'analytics':
         return <BarChart3 className="h-5 w-5 text-purple-600" />
       case 'administrative':
-        return <FileText className="h-5 w-5 text-gray-600" />
+        return <FileText className="h-5 w-5 text-gray-600 dark:text-gray-300" />
       default:
-        return <FileText className="h-5 w-5 text-gray-600" />
+        return <FileText className="h-5 w-5 text-gray-600 dark:text-gray-300" />
     }
   }
 
@@ -183,8 +183,8 @@ export default function StudentReports() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Academic Reports</h1>
-          <p className="text-gray-600">Download and manage your academic documents</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Academic Reports</h1>
+          <p className="text-gray-600 dark:text-gray-300">Download and manage your academic documents</p>
         </div>
         <Button className="flex items-center gap-2">
           <Download className="h-4 w-4" />
@@ -300,7 +300,7 @@ export default function StudentReports() {
                         {getTypeIcon(report.type)}
                         <div className="flex-1">
                           <h3 className="font-semibold">{report.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{report.description}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{report.description}</p>
                           <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                             <span>Format: {report.format}</span>
                             <span>Size: {report.size}</span>
