@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { authAPI } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import ModeToggle from "@/components/ModeToggle";
 import {
   Card,
   CardContent,
@@ -50,7 +51,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8 relative">
+      <div className="absolute top-4 right-4">
+        <ModeToggle />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
@@ -58,7 +62,7 @@ export default function RegisterPage() {
               <GraduationCap className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-center text-gray-900">
+          <CardTitle className="text-2xl font-bold text-center">
             Create an account
           </CardTitle>
           <CardDescription className="text-center">
