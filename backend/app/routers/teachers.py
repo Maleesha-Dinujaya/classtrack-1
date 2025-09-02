@@ -80,3 +80,37 @@ def update_student(
     db.commit()
     db.refresh(student)
     return student
+
+
+@router.get("/grades", response_model=List[schemas.Grade])
+def get_grades(
+    current_user: models.User = Depends(auth.get_current_active_teacher),
+    db: Session = Depends(get_db),
+):
+    return db.query(models.Grade).all()
+
+
+@router.post("/grades", response_model=schemas.Grade, status_code=201)
+def add_grade(
+    grade: schemas.GradeCreate,
+    current_user: models.User = Depends(auth.get_current_active_teacher),
+    db: Session = Depends(get_db),
+):
+    student = (
+        db.query(models.Student)
+        .filter(models.Student.id == grade.student_id)
+        .first()
+    )
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    new_grade = models.Grade(
+        student_id=grade.student_id,
+        subject=grade.subject,
+        grade=grade.grade,
+        assignment_type=grade.assignment_type,
+    )
+    db.add(new_grade)
+    db.commit()
+    db.refresh(new_grade)
+    return new_grade
