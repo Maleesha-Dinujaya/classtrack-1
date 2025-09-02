@@ -203,7 +203,7 @@ Ms. Weerasinghe`,
       case 'medium':
         return 'text-yellow-600'
       default:
-        return 'text-gray-600'
+        return 'text-gray-600 dark:text-gray-300'
     }
   }
 
@@ -346,7 +346,7 @@ Ms. Weerasinghe`,
               <h3 className={`font-medium text-sm mb-1 ${!message.read ? 'font-semibold' : ''}`}>
                 {message.subject}
               </h3>
-              <p className="text-xs text-gray-600 line-clamp-2">
+              <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
                 {message.preview}
               </p>
               {message.attachments.length > 0 && (
@@ -377,7 +377,7 @@ Ms. Weerasinghe`,
                   </Avatar>
                   <div>
                     <h2 className="font-semibold text-lg">{selectedMessage.subject}</h2>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       From: {selectedMessage.from} &lt;{selectedMessage.fromEmail}&gt;
                     </p>
                     <p className="text-sm text-gray-500">{selectedMessage.timestamp}</p>
@@ -464,7 +464,7 @@ Ms. Weerasinghe`,
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
               <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No message selected</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No message selected</h3>
               <p className="text-gray-500">Select a message from the list to view its content</p>
             </div>
           </div>

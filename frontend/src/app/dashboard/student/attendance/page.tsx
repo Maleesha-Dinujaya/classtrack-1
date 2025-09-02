@@ -148,8 +148,8 @@ export default function StudentAttendance() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Attendance Tracking</h1>
-          <p className="text-gray-600">Monitor your class attendance and track your progress</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Attendance Tracking</h1>
+          <p className="text-gray-600 dark:text-gray-300">Monitor your class attendance and track your progress</p>
         </div>
         <Button variant="outline" className="flex items-center gap-2">
           <Download className="h-4 w-4" />
@@ -184,7 +184,7 @@ export default function StudentAttendance() {
               />
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">{overallAttendance.totalClasses}</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">{overallAttendance.totalClasses}</div>
               <p className="text-sm text-gray-500 mt-1">Total Classes</p>
             </div>
             <div className="text-center">
@@ -349,22 +349,22 @@ export default function StudentAttendance() {
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
               <div>
                 <h3 className="font-semibold">Minimum Attendance Requirement</h3>
-                <p className="text-sm text-gray-600">You need at least 75% attendance to be eligible for exams</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">You need at least 75% attendance to be eligible for exams</p>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-green-600">✓</div>
-                <p className="text-sm text-gray-600">Goal Met</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Goal Met</p>
               </div>
             </div>
 
             <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
               <div>
                 <h3 className="font-semibold">Excellent Attendance (90%+)</h3>
-                <p className="text-sm text-gray-600">Maintain 90%+ attendance for academic excellence recognition</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Maintain 90%+ attendance for academic excellence recognition</p>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-green-600">✓</div>
-                <p className="text-sm text-gray-600">Goal Met</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Goal Met</p>
               </div>
             </div>
           </div>

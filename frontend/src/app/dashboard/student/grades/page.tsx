@@ -185,8 +185,8 @@ export default function StudentGrades() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Grades & GPA</h1>
-          <p className="text-gray-600">Track your academic performance and calculate your GPA</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Grades & GPA</h1>
+          <p className="text-gray-600 dark:text-gray-300">Track your academic performance and calculate your GPA</p>
         </div>
         <Button variant="outline" className="flex items-center gap-2">
           <Download className="h-4 w-4" />
@@ -233,7 +233,7 @@ export default function StudentGrades() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{gpaData.totalCredits}</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{gpaData.totalCredits}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Credits completed
             </p>
@@ -246,7 +246,7 @@ export default function StudentGrades() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">15</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">15</div>
             <p className="text-xs text-muted-foreground mt-1">
               Out of 150 students
             </p>
@@ -490,7 +490,7 @@ export default function StudentGrades() {
                     <div className="text-3xl font-bold text-blue-600 mt-2">
                       {calculateGPA()}
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                       Based on entered grades and credits
                     </p>
                   </div>
