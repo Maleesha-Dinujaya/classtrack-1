@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { AuthProvider } from "@/context/AuthContext";
 import { SubjectsProvider } from "@/context/SubjectsContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function ClientBody({
   children,
@@ -16,10 +17,12 @@ export default function ClientBody({
   }, []);
 
   return (
-    <AuthProvider>
-      <SubjectsProvider>
-        <div className="antialiased">{children}</div>
-      </SubjectsProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <SubjectsProvider>
+          <div className="antialiased">{children}</div>
+        </SubjectsProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
