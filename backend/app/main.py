@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI #import API
 from fastapi.middleware.cors import CORSMiddleware
 from .database import init_db
 from .routers import auth, attendance, students, teachers
