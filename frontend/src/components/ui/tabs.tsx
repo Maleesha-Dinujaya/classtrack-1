@@ -1,4 +1,4 @@
-"use client"
+"use client"//tabs
 
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
