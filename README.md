@@ -5,7 +5,7 @@ This repository contains the frontend and backend for ClassTrack.
 - `frontend/` – Next.js application
 - `backend/` – FastAPI application
 
-## Backend setup
+##   Backend   setup
 
 ```bash
 cd backend
@@ -17,7 +17,7 @@ uvicorn app.main:app --reload
 
 ## Frontend setup
 
-```bash
+```bash  
 cd frontend
 npm install
 npm run dev
