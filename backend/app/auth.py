@@ -66,15 +66,30 @@ def get_current_active_user(current_user: models.User = Depends(get_current_user
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-def check_role_permissions(role: str, current_user: models.User = Depends(get_current_active_user)):
-    """ Generic role-based access control """
-    if current_user.role != role:
-        raise HTTPException(status_code=403, detail=f"Not enough permissions for {role} role")
-    return current_user
+def check_role_permissions(role: str):
+    """Generic role-based access control dependency factory.
+
+    Returns a dependency function that ensures the current user has the required role.
+    """
+
+    def _checker(current_user: models.User = Depends(get_current_active_user)):
+        if current_user.role != role:
+            raise HTTPException(
+                status_code=403, detail=f"Not enough permissions for {role} role"
+            )
+        return current_user
+
+    return _checker
+
 
 # Now you can use the `check_role_permissions` function to handle any role-based permissions:
-def get_current_active_teacher(current_user: models.User = Depends(check_role_permissions("teacher"))):
+def get_current_active_teacher(
+    current_user: models.User = Depends(check_role_permissions("teacher")),
+):
     return current_user
 
-def get_current_active_student(current_user: models.User = Depends(check_role_permissions("student"))):
+
+def get_current_active_student(
+    current_user: models.User = Depends(check_role_permissions("student")),
+):
     return current_user
