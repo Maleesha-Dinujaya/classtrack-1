@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "bunx tsc --noEmit && next lint",
-    "format": "bunx biome format --write"
+    "format": "bunx biome format --write",
+    "test": "bun test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
