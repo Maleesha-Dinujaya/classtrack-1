@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react"//table
 
 import { cn } from "@/lib/utils"
 
